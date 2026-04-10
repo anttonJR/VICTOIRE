@@ -1,0 +1,1410 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Association | Les Victoires</title>
+	<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+	<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" />
+	<style>
+		:root {
+			--bg: #000000;
+			--text: #ffffff;
+			--text-soft: rgba(255, 255, 255, 0.92);
+			--glass-bg: rgba(255, 255, 255, 0.12);
+			--glass-border: rgba(255, 255, 255, 0.24);
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		body {
+			width: 100%;
+			min-height: 100%;
+		}
+
+		html,
+		body,
+		body *,
+		body *::before,
+		body *::after {
+			font-family: "Satoshi", sans-serif !important;
+		}
+
+		body {
+			font-family: "Satoshi", sans-serif;
+			background: var(--bg);
+			color: var(--text);
+			padding: 0;
+		}
+
+		.page {
+			max-width: 1500px;
+			margin: 0 auto;
+			padding: 36px 72px 64px;
+		}
+
+		.navbar-wrap {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 116px;
+		}
+
+		.navbar {
+			position: relative;
+			display: inline-flex;
+			align-items: center;
+			gap: 0;
+			padding: 8px 10px;
+			border-radius: 0;
+			border: 1px solid var(--glass-border);
+			background:
+				linear-gradient(180deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.05)),
+				var(--glass-bg);
+			backdrop-filter: blur(14px) saturate(145%);
+			-webkit-backdrop-filter: blur(14px) saturate(145%);
+			box-shadow:
+				inset 0 1px 1px rgba(255, 255, 255, 0.149),
+				inset 0 -8px 20px rgba(0, 0, 0, 0.2),
+				0 10px 26px rgba(40, 0, 0, 0.28);
+			overflow: visible;
+			transform-style: preserve-3d;
+			transition: transform 220ms ease;
+		}
+
+		.navbar::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.28) 50%, transparent 78%);
+			transform: translateX(-125%);
+			transition: transform 650ms ease;
+			pointer-events: none;
+		}
+
+		.navbar.is-shiny::before {
+			transform: translateX(125%);
+		}
+
+		.navbar a {
+			color: #fff5f5;
+			text-decoration: none;
+			font-weight: 500;
+			line-height: 1;
+			font-size: clamp(12px, 1.18vw, 14px);
+			letter-spacing: 0.01em;
+			padding: 10px 14px;
+			border-radius: 0;
+			white-space: nowrap;
+			transition: background-color 180ms ease, color 180ms ease;
+		}
+
+		.navbar a:hover {
+			background: rgba(255, 255, 255, 0.17);
+			border-radius: 0;
+			color: #ffffff;
+		}
+
+		.navbar a.nav-active {
+			background: rgba(255, 255, 255, 0.22);
+			border-radius: 0;
+			color: #ffffff;
+		}
+
+		.nav-dropdown {
+			position: relative;
+		}
+
+		.nav-dropdown-toggle {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		.nav-dropdown-arrow {
+			transition: transform 0.25s ease;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.nav-dropdown.is-open .nav-dropdown-arrow {
+			transform: rotate(180deg);
+		}
+
+		.nav-dropdown-menu {
+			position: absolute;
+			top: calc(100% + 12px);
+			right: 0;
+			transform: translateY(8px);
+			min-width: 200px;
+			background:
+				linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)),
+				rgba(255, 255, 255, 0.08);
+			border: 1px solid var(--glass-border);
+			backdrop-filter: blur(10px) saturate(120%);
+			-webkit-backdrop-filter: blur(10px) saturate(120%);
+			border-radius: 0;
+			padding: 6px 0;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.25s ease, transform 0.25s ease;
+			z-index: 100;
+			box-shadow:
+				inset 0 1px 0 rgba(255, 255, 255, 0.12),
+				0 8px 20px rgba(0, 0, 0, 0.3);
+			overflow: hidden;
+		}
+
+		.nav-dropdown.is-open .nav-dropdown-menu {
+			opacity: 1;
+			pointer-events: auto;
+			transform: translateY(0);
+		}
+
+		.nav-dropdown-menu a {
+			display: block;
+			padding: 10px 18px !important;
+			font-size: clamp(12px, 1.18vw, 14px) !important;
+			font-weight: 500;
+			color: #fff5f5;
+			white-space: nowrap;
+			transition: background 0.18s ease, color 0.18s ease;
+			position: relative;
+		}
+
+		.nav-dropdown-menu a:hover {
+			background: rgba(255, 255, 255, 0.17);
+			color: #ffffff;
+		}
+
+		.association-grid {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			max-width: 1060px;
+			margin: 0 auto;
+			column-gap: clamp(42px, 5vw, 96px);
+			row-gap: 44px;
+			align-items: start;
+		}
+
+		h1 {
+			font-size: clamp(44px, 4.6vw, 64px);
+			line-height: 0.98;
+			letter-spacing: -0.03em;
+			font-weight: 700;
+			margin-bottom: 30px;
+		}
+
+		.copy {
+			font-size: clamp(18px, 1.22vw, 22px);
+			line-height: 1.44;
+			color: var(--text-soft);
+			max-width: 520px;
+		}
+
+		.copy + .copy {
+			margin-top: 32px;
+		}
+
+		.visual {
+			display: block;
+			width: 100%;
+			max-width: 460px;
+			justify-self: center;
+			height: auto;
+			object-fit: cover;
+		}
+
+		.team-section {
+			max-width: 1120px;
+			margin: 120px auto 0;
+		}
+
+		.team-title {
+			text-align: center;
+			font-size: clamp(46px, 4.8vw, 64px);
+			font-weight: 700;
+			line-height: 1;
+			letter-spacing: -0.03em;
+			margin-bottom: 52px;
+		}
+
+		.team-grid {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: clamp(18px, 2.4vw, 38px);
+			align-items: start;
+		}
+
+		.team-member {
+			text-align: center;
+		}
+
+		.team-role {
+			font-size: clamp(16px, 1.03vw, 18px);
+			line-height: 1.32;
+			color: var(--text-soft);
+			min-height: 2.64em;
+			margin-bottom: 16px;
+		}
+
+		.team-photo {
+			display: block;
+			width: 100%;
+			max-width: 300px;
+			height: auto;
+			margin: 0 auto;
+			object-fit: cover;
+		}
+
+		.team-notes {
+			margin-top: 46px;
+			text-align: center;
+		}
+
+		.team-note {
+			font-size: clamp(17px, 1.05vw, 22px);
+			line-height: 1.45;
+			color: var(--text-soft);
+		}
+
+		.team-note + .team-note {
+			margin-top: 14px;
+		}
+
+		.palmares-section {
+			max-width: 980px;
+			margin: 180px auto 0;
+			transform: translateX(212px);
+		}
+
+		.palmares-panel {
+			display: grid;
+			grid-template-columns: 240px 1fr;
+			column-gap: 38px;
+			align-items: start;
+		}
+
+		.palmares-year-wrap {
+			display: grid;
+			justify-items: center;
+			row-gap: 22px;
+			padding-top: 64px;
+		}
+
+		.palmares-arrow {
+			width: 44px;
+			height: 44px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			border-radius: 999px;
+			background: #101216;
+			color: #ffffff;
+			font-size: 24px;
+			line-height: 1;
+			cursor: pointer;
+			transition: opacity 0.2s ease, background 0.2s ease;
+			font-family: inherit;
+			padding: 0;
+		}
+
+		.palmares-arrow:hover {
+			background: rgba(255, 255, 255, 0.12);
+		}
+
+		.palmares-year {
+			font-size: clamp(48px, 5.2vw, 72px);
+			font-weight: 700;
+			line-height: 1;
+			letter-spacing: -0.03em;
+			overflow: hidden;
+			position: relative;
+			height: 1em;
+		}
+
+		.palmares-year-inner {
+			display: block;
+			transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+		}
+
+		.palmares-year-inner.slide-up-out {
+			transform: translateY(-100%);
+			opacity: 0;
+		}
+
+		.palmares-year-inner.slide-down-out {
+			transform: translateY(100%);
+			opacity: 0;
+		}
+
+		.palmares-year-inner.slide-up-in {
+			transform: translateY(100%);
+			opacity: 0;
+			transition: none;
+		}
+
+		.palmares-year-inner.slide-down-in {
+			transform: translateY(-100%);
+			opacity: 0;
+			transition: none;
+		}
+
+		.palmares-list-wrap {
+			border-left: 1px solid rgba(255, 255, 255, 0.35);
+			padding-left: 28px;
+			transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+		}
+
+		.palmares-list-wrap.fade-out {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+
+		.palmares-list-wrap.fade-in-prep {
+			opacity: 0;
+			transform: translateY(-12px);
+			transition: none;
+		}
+
+		.palmares-date {
+			font-size: clamp(22px, 1.5vw, 28px);
+			line-height: 1.35;
+			margin-bottom: 8px;
+		}
+
+		.palmares-list {
+			padding-left: 1.1em;
+			font-size: clamp(22px, 1.45vw, 28px);
+			line-height: 1.45;
+			color: var(--text-soft);
+		}
+
+		.palmares-list strong {
+			color: #ffffff;
+			font-weight: 700;
+		}
+
+		.palmares-right-col {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.palmares-category-wrap {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 88px;
+			justify-content: center;
+			transform: translateX(-212px);
+		}
+
+		.palmares-category-btn {
+			background: rgba(255, 255, 255, 0);
+			border: 2px solid rgb(255, 255, 255);
+			color: rgba(255, 255, 255, 0.6);
+			font-family: "Satoshi", sans-serif;
+			font-size: 18px;
+			font-weight: 600;
+			padding: 12px 28px;
+			cursor: pointer;
+			transition: all 250ms ease;
+			letter-spacing: 0.01em;
+		}
+
+		.palmares-category-btn:hover {
+			background: rgba(255, 255, 255, 0.14);
+			color: #ffffff;
+		}
+
+		.palmares-category-btn.is-active {
+			background: #ffffff;
+			color: #000000;
+			border-color: #ffffff;
+		}
+
+		.site-footer {
+			margin-top: 72px;
+			background: #cf1a1e;
+		}
+
+		.site-footer-top {
+			max-width: 1260px;
+			margin: 0 auto;
+			padding: clamp(30px, 4vw, 46px) clamp(14px, 2vw, 28px) clamp(34px, 4vw, 50px);
+			display: grid;
+			grid-template-columns: minmax(250px, 1.2fr) minmax(240px, 0.9fr) auto;
+			gap: clamp(18px, 4vw, 72px);
+			align-items: center;
+		}
+
+		.footer-logo {
+			width: clamp(200px, 26vw, 380px);
+			margin-left: clamp(-120px, -10vw, -62px);
+			height: auto;
+		}
+
+		.footer-links {
+			display: flex;
+			align-items: flex-start;
+			gap: clamp(26px, 4vw, 56px);
+			margin-left: clamp(-56px, -4.8vw, -24px);
+		}
+
+		.footer-links-column {
+			display: grid;
+			gap: 8px;
+		}
+
+		.footer-links a {
+			color: #ffffff;
+			text-decoration: underline;
+			text-underline-offset: 3px;
+			font-size: clamp(14px, 1vw, 20px);
+			font-weight: 500;
+			line-height: 1.2;
+			white-space: nowrap;
+		}
+
+		.footer-social {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.footer-social a {
+			width: clamp(40px, 3vw, 48px);
+			height: clamp(40px, 3vw, 48px);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid #ffffff;
+			border-radius: 999px;
+			color: #ffffff;
+			text-decoration: none;
+			font-size: clamp(16px, 1.15vw, 18px);
+			font-weight: 700;
+			line-height: 1;
+		}
+
+		.footer-social img {
+			width: 56%;
+			height: 56%;
+			object-fit: contain;
+			display: block;
+		}
+
+		.site-footer-bottom {
+			background: #000000;
+		}
+
+		.site-footer-bottom-wrap {
+			max-width: 1260px;
+			margin: 0 auto;
+			padding: 16px clamp(14px, 2vw, 28px);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 14px;
+			color: rgba(255, 255, 255, 0.92);
+			font-size: 13px;
+		}
+
+		.site-footer-bottom a {
+			color: #ffffff;
+			text-decoration: none;
+			font-size: clamp(16px, 1.35vw, 20px);
+			font-weight: 500;
+		}
+
+		@media (max-width: 1180px) {
+			.page {
+				padding-left: 34px;
+				padding-right: 34px;
+			}
+
+			.copy {
+				font-size: clamp(18px, 2.05vw, 24px);
+			}
+		}
+
+		@media (max-width: 980px) {
+			.navbar {
+				max-width: calc(100vw - 20px);
+				flex-wrap: wrap;
+				scrollbar-width: none;
+			}
+
+			.navbar::-webkit-scrollbar {
+				display: none;
+			}
+		}
+
+		@media (max-width: 840px) {
+			.page {
+				padding: 20px 14px 40px;
+			}
+
+			.navbar-wrap {
+				margin-bottom: 56px;
+			}
+
+			.association-grid {
+				grid-template-columns: 1fr;
+				row-gap: 24px;
+			}
+
+			h1 {
+				font-size: clamp(42px, 11vw, 58px);
+				margin-bottom: 22px;
+			}
+
+			.copy {
+				font-size: 17px;
+				line-height: 1.5;
+			}
+
+			.copy + .copy {
+				margin-top: 16px;
+			}
+
+			.team-section {
+				margin-top: 70px;
+			}
+
+			.team-title {
+				font-size: clamp(38px, 11vw, 52px);
+				margin-bottom: 28px;
+			}
+
+			.team-grid {
+				grid-template-columns: 1fr;
+				gap: 26px;
+			}
+
+			.team-role {
+				min-height: 0;
+				margin-bottom: 12px;
+				font-size: 16px;
+			}
+
+			.team-photo {
+				max-width: 290px;
+			}
+
+			.team-notes {
+				margin-top: 34px;
+			}
+
+			.team-note {
+				font-size: 16px;
+			}
+
+			.palmares-section {
+				margin-top: 96px;
+				transform: none;
+			}
+
+			.palmares-panel {
+				grid-template-columns: 1fr;
+				row-gap: 22px;
+			}
+
+			.palmares-year-wrap {
+				row-gap: 14px;
+				padding-top: 14px;
+			}
+
+			.palmares-list-wrap {
+				border-left: 0;
+				border-top: 1px solid rgba(255, 255, 255, 0.35);
+				padding-left: 0;
+				padding-top: 16px;
+			}
+
+			.palmares-date,
+			.palmares-list {
+				font-size: 18px;
+			}
+
+			.site-footer-top {
+				grid-template-columns: 1fr;
+				gap: 20px;
+				justify-items: start;
+			}
+
+			.site-footer {
+				margin-top: 48px;
+			}
+
+			.footer-logo {
+				margin-left: 0;
+				width: clamp(180px, 60vw, 260px);
+			}
+
+			.footer-links {
+				margin-left: 0;
+				gap: 24px;
+			}
+
+			.footer-links-column {
+				gap: 6px;
+			}
+
+			.footer-links a {
+				font-size: 15px;
+			}
+
+			.site-footer-bottom-wrap {
+				flex-direction: column;
+				align-items: flex-start;
+				padding: 14px 12px 18px;
+			}
+
+			.site-footer-bottom a {
+				font-size: 15px;
+			}
+		}
+
+		.burger-btn {
+			display: none;
+		}
+
+		.mobile-menu-overlay {
+			display: none;
+		}
+
+		@media (max-width: 680px) {
+			.burger-btn {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 5px;
+				width: 44px;
+				height: 44px;
+				padding: 0;
+				border: 1px solid var(--glass-border);
+				border-radius: 0;
+				background:
+					linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.05)),
+					var(--glass-bg);
+				backdrop-filter: blur(14px) saturate(145%);
+				-webkit-backdrop-filter: blur(14px) saturate(145%);
+				cursor: pointer;
+				position: fixed;
+				top: 18px;
+				right: 16px;
+				z-index: 200;
+				transition: background-color 200ms ease;
+			}
+
+			.burger-line {
+				display: block;
+				width: 20px;
+				height: 2px;
+				background: #ffffff;
+				border-radius: 2px;
+				transition: transform 300ms ease, opacity 200ms ease;
+			}
+
+			.burger-btn.is-open .burger-line:nth-child(1) {
+				transform: translateY(7px) rotate(45deg);
+			}
+
+			.burger-btn.is-open .burger-line:nth-child(2) {
+				opacity: 0;
+			}
+
+			.burger-btn.is-open .burger-line:nth-child(3) {
+				transform: translateY(-7px) rotate(-45deg);
+			}
+
+			.navbar {
+				display: none;
+			}
+
+			.mobile-menu-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 100;
+				display: flex;
+				flex-direction: column;
+				align-items: stretch;
+				justify-content: center;
+				gap: 0;
+				padding: 60px 24px 40px;
+				background: rgba(0, 0, 0, 0.45);
+				opacity: 0;
+				visibility: hidden;
+				transition: opacity 300ms ease, visibility 300ms ease;
+				overflow-y: auto;
+				overflow-x: hidden;
+			}
+
+			.mobile-menu-overlay.is-menu-open {
+				opacity: 1;
+				visibility: visible;
+			}
+
+			.mobile-menu-overlay a {
+				color: #fff5f5;
+				text-decoration: none;
+				padding: 16px 0;
+				font-size: 20px;
+				font-weight: 600;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+				white-space: normal;
+				display: block;
+			}
+
+			.mobile-menu-overlay a:last-child,
+			.mobile-menu-overlay .nav-dropdown:last-child {
+				border-bottom: none;
+			}
+
+			.mobile-menu-overlay a:hover,
+			.mobile-menu-overlay a.nav-active {
+				color: #cf1a1e;
+			}
+
+			.mobile-menu-overlay .nav-dropdown {
+				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+			}
+
+			.mobile-menu-overlay .nav-dropdown-toggle {
+				padding: 16px 0;
+				font-size: 20px;
+				font-weight: 600;
+				color: #fff5f5;
+			}
+
+			.mobile-menu-overlay .nav-dropdown-menu {
+				position: static;
+				transform: none;
+				background: transparent;
+				border: none;
+				backdrop-filter: none;
+				-webkit-backdrop-filter: none;
+				box-shadow: none;
+				padding: 0 0 8px 16px;
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			.mobile-menu-overlay .nav-dropdown:not(.is-open) .nav-dropdown-menu {
+				opacity: 0;
+				pointer-events: none;
+				max-height: 0;
+				overflow: hidden;
+				padding: 0;
+			}
+
+			.mobile-menu-overlay .nav-dropdown-menu a {
+				padding: 12px 0;
+				font-size: 17px;
+				border-bottom: none;
+			}
+
+			body.menu-blur .page,
+			body.menu-blur .site-footer {
+				filter: blur(18px);
+				pointer-events: none;
+				transition: filter 300ms ease;
+			}
+
+			body.menu-blur .burger-btn {
+				filter: none;
+				pointer-events: auto;
+			}
+		}
+	</style>
+</head>
+<body>
+	<button class="burger-btn" id="burgerBtn" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+		<span class="burger-line"></span>
+		<span class="burger-line"></span>
+		<span class="burger-line"></span>
+	</button>
+	<div class="page">
+		<div class="navbar-wrap">
+			<nav class="navbar" id="liquidNavbar" aria-label="Navigation principale">
+				<a href="index.html">Victoires De La Musique</a>
+				<a href="index.html?theme=jazz">Victoires Du Jazz</a>
+				<a href="index.html?theme=classique">Victoires De La Musique Classique</a>
+				<a href="associations.html" class="nav-active">L'association</a>
+				<div class="nav-dropdown">
+					<a href="#" class="nav-dropdown-toggle">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+					<div class="nav-dropdown-menu">
+						<a href="vote.html">Musique</a>
+						<a href="#">Jazz</a>
+						<a href="#">Musique Classique</a>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+		<section class="association-grid" aria-label="Presentation de l'association">
+			<div>
+				<h1>L'association</h1>
+				<p class="copy">L'Association "Les Victoires de la Musique" a ete creee le 26 juin 1985. Son objectif est d'organiser et de produire trois emissions de television sous forme d'un spectacle "en direct" pour les Victoires de la Musique, et les Victoires de la Musique Classique et d'un film pour les Victoires du Jazz, durant lesquels sont decernes des prix, dits "Victoires".</p>
+			</div>
+
+			<div>
+				<img class="visual" src="assets/association/association_photo1.png" alt="Photo historique de l'association" loading="lazy" />
+			</div>
+
+			<div>
+				<img class="visual" src="assets/association/association_photo2.png" alt="Membres de l'association" loading="lazy" />
+			</div>
+
+			<div>
+				<p class="copy">L'Association "Les Victoires de la Musique", association regie par la loi de 1901, regroupe 27 membres dont 16 organisations de la filiere musicale (reparties en 4 colleges :</p>
+				<p class="copy">le college des auteurs, compositeurs, editeurs, le college des artistes interpretes, le college des producteurs phonographiques et le college des producteurs de spectacles), le Ministere de la Culture (DGMIC et DGCA), 5 membres associes et 2 membres observateurs (CNM).</p>
+			</div>
+		</section>
+
+		<section class="team-section" aria-label="L'equipe de l'association">
+			<h2 class="team-title">L'equipe</h2>
+
+			<div class="team-grid">
+				<article class="team-member">
+					<p class="team-role">President de l'Association pour les editions 2026 et 2027 : Antoine Gouiffes-Yan</p>
+					<img class="team-photo" src="assets/association/association_équipe1.png" alt="Portrait d'Antoine Gouiffes-Yan" loading="lazy" />
+				</article>
+
+				<article class="team-member">
+					<p class="team-role">President des Victoires du Jazz 2026 : Bruno Guermonprez</p>
+					<img class="team-photo" src="assets/association/association_équipe2.png" alt="Portrait de Bruno Guermonprez" loading="lazy" />
+				</article>
+
+				<article class="team-member">
+					<p class="team-role">President des Victoires de la Musique Classique 2026 : Herve Defranoux</p>
+					<img class="team-photo" src="assets/association/association_équipe3.png" alt="Portrait de Herve Defranoux" loading="lazy" />
+				</article>
+			</div>
+
+			<div class="team-notes">
+				<p class="team-note">Directeur general : Jean-Yves de Linares</p>
+				<p class="team-note">Directrice executive : Octavie de Tournemire</p>
+				<p class="team-note">Direction artistique des ceremonies :<br />Les Victoires de la Musique : Virginie Petit<br />Les Victoires de la Musique Classique : Anne Gubian<br />Les Victoires du Jazz : Octavie de Tournemire</p>
+				<p class="team-note">La production executive des 3 ceremonies est assuree par l'Association.</p>
+			</div>
+		</section>
+
+		<section class="palmares-section" aria-label="Palmares">
+			<div class="palmares-category-wrap" id="palmaresCategoryWrap">
+				<button class="palmares-category-btn is-active" data-category="musique">Musique</button>
+				<button class="palmares-category-btn" data-category="jazz">Jazz</button>
+				<button class="palmares-category-btn" data-category="classique">Classique</button>
+			</div>
+			<div class="palmares-panel">
+				<div class="palmares-year-wrap">
+					<button class="palmares-arrow" id="palmaresUp" aria-label="Annee precedente">&#8593;</button>
+					<div class="palmares-year"><span class="palmares-year-inner" id="palmaresYear">2026</span></div>
+					<button class="palmares-arrow" id="palmaresDown" aria-label="Annee suivante">&#8595;</button>
+				</div>
+					<div class="palmares-list-wrap" id="palmaresContent">
+					<p class="palmares-date">Date : 13 fevrier 2026</p>
+					<ul class="palmares-list">
+						<li>Artiste masculin : <strong>Disiz</strong></li>
+						<li>Artiste feminine : <strong>Charlotte Cardin</strong></li>
+						<li>Revelation masculine : <strong>Sam Sauvage</strong></li>
+						<li>Revelation feminine : <strong>Theodora</strong></li>
+						<li>Revelation scene : <strong>Theodora</strong></li>
+						<li>Album : <strong>Theodora</strong></li>
+						<li>Chanson originale : <strong>"Mauvais garcon" de Helena</strong></li>
+						<li>Concert : <strong>"Justice Live" de Justice</strong></li>
+						<li>Creation audiovisuelle : <strong>Theodora</strong></li>
+					</ul>
+					</div>
+			</div>
+		</section>
+
+		<script>
+		(function () {
+			const data = {
+				2026: {
+					musique: {
+						date: "Date : 13 fevrier 2026",
+						items: [
+							"Artiste masculin : <strong>Disiz</strong>",
+							"Artiste feminine : <strong>Charlotte Cardin</strong>",
+							"Revelation masculine : <strong>Sam Sauvage</strong>",
+							"Revelation feminine : <strong>Theodora</strong>",
+							"Revelation scene : <strong>Theodora</strong>",
+							"Album : <strong>Theodora</strong>",
+							"Chanson originale : <strong>\"Mauvais garcon\" de Helena</strong>",
+							"Concert : <strong>\"Justice Live\" de Justice</strong>",
+							"Creation audiovisuelle : <strong>Theodora</strong>"
+						]
+					},
+					jazz: {
+						date: "Date : entre le 3 et le 24 fevrier 2026 (Nominations)",
+						items: [
+							"Artiste instrumental(e) : <strong>Airelle Besson (trompette) / Catherine Delaunay (clarinette) / Baptiste Herbin (saxophone)</strong>",
+							"Artiste vocal(e) : <strong>Cynthia Abraham / Leila Martial / Marion Rampal</strong>",
+							"Revelation (Prix Frank Tenot) : <strong>Olga Amelchenko (saxophone) / Noe Huchard (piano) / Guillaume Latil (violoncelle)</strong>",
+							"Concert : <strong>\"Blossom\" d'Airelle Besson &amp; Lionel Suarez / \"Quatuor Demi-Lune\" de Robinson Khoury / \"Song For Abbey\" de Marion Rampal</strong>",
+							"Album : <strong>\"Liberation Songs\" de Stephane Kerecki / \"Song For Abbey\" de Marion Rampal / \"The Getdown\" de Coulondre, Dolmen, Privat</strong>",
+							"Album de musiques du monde : <strong>\"Mit Warde - Cent Roses\" de Sarab / \"Tales Of Nar\" de Keyvan Chemirani / \"Zagate\" de Souad Massi</strong>"
+						]
+					},
+					classique: {
+						date: "Date : 20 mars 2026 - 33emes Victoires de la Musique Classique",
+						items: [
+							"Soliste instrumental(e) : <strong>Adelaide Ferriere, percussions</strong>",
+							"Artiste lyrique : <strong>Sabine Devieilhe, soprano</strong>",
+							"Revelation, soliste instrumental(e) : <strong>Arielle Beck, piano</strong>",
+							"Revelation, artiste lyrique : <strong>Tamara Bounazou, soprano</strong>",
+							"Revelation, chef d'orchestre : <strong>Alize Lehon</strong>",
+							"Compositeur/compositrice : <strong>Francesco Filidei pour Il nome de la rosa, Opera</strong>",
+							"Enregistrement : <strong>\"Te Deum pour Notre-Dame\" - Thierry Escaich, Alain Altinoglu, Maitrise de Notre-Dame de Paris (Alpha Classics)</strong>"
+						]
+					}
+				},
+				2025: {
+					musique: {
+						date: "Date : 14 fevrier 2025",
+						items: [
+							"Artiste masculin : <strong>Gims</strong>",
+							"Artiste feminine : <strong>Zaho de Sagazan</strong>",
+							"Revelation masculine : <strong>Pierre Garnier</strong>",
+							"Revelation feminine : <strong>Solann</strong>",
+							"Revelation scene : <strong>Yoa</strong>",
+							"Album : <strong>\"Recommence moi\" de Santa</strong>",
+							"Chanson originale : <strong>\"Ceux qui etaient la\" de Pierre Garnier</strong>",
+							"Concert : <strong>Ceremonie d'ouverture et de clotures des Jeux Olympiques et Paralympiques d'ete, production : Paris 2024</strong>",
+							"Creation audiovisuelle : <strong>\"DJ Mehdi : made in France\" - Realisateur : Thibaut de Longeville</strong>"
+						]
+					},
+					jazz: {
+						date: "Date : 2025",
+						items: [
+							"Artiste instrumental(e) : <strong>Arnaud Dolmen (batterie)</strong>",
+							"Artiste vocal(e) : <strong>Celia Kameni</strong>",
+							"Revelation (Prix Frank Tenot) : <strong>Adele Viret (violoncelle)</strong>",
+							"Concert : <strong>\"Pianoforte\" d'Eric Legnini, Bojan Z, Pierre de Bethmann &amp; Baptiste Trotignon (Anteprima Production)</strong>",
+							"Album : <strong>\"Pianoforte\" d'Eric Legnini, Bojan Z, Pierre de Bethmann &amp; Baptiste Trotignon (Artwork Records/[Pias])</strong>",
+							"Album de musiques du monde : <strong>\"La Chica &amp; El Duende Orchestra\" de La Chica &amp; El Duende</strong>"
+						]
+					},
+					classique: {
+						date: "Date : mercredi 5 mars 2025",
+						items: [
+							"Soliste instrumental(e) : <strong>Lucile Boulanger, viole de gambe</strong>",
+							"Artiste lyrique : <strong>Lucile Richardot, mezzo-soprano</strong>",
+							"Revelation, soliste instrumental(e) : <strong>Lorraine Campet, contrebasse</strong>",
+							"Revelation, artiste lyrique : <strong>Julie Roset, soprano</strong>",
+							"Revelation, chef d'orchestre : <strong>Simon Proust</strong>",
+							"Compositeur : <strong>Regis Campo pour Dancefloor with Pulsing pour theremine et orchestre</strong>",
+							"Enregistrement : <strong>\"Picture a day like this\" - George Benjamin (Nimbus Records)</strong>",
+							"Victoire d'honneur : <strong>Natalie Dessay</strong>"
+						]
+					}
+				},
+				2024: {
+					musique: {
+						date: "Date : 2024 - 39emes Victoires de la Musique",
+						items: [
+							"Artiste masculin : <strong>Gazo &amp; Vianney (ex-aequo)</strong>",
+							"Artiste feminine : <strong>Aya Nakamura</strong>",
+							"Revelation masculine : <strong>Yame</strong>",
+							"Revelation feminine : <strong>Zaho de Sagazan</strong>",
+							"Revelation scene : <strong>Zaho de Sagazan</strong>",
+							"Album : <strong>\"La symphonie des eclairs\" - Zaho de Sagazan</strong>",
+							"Chanson originale : <strong>\"La symphonie des eclairs\" - Zaho de Sagazan</strong>",
+							"Concert : <strong>Damso - \"Qalf Tour\" (Strong Live/The Vie/Yuma/Carthage)</strong>",
+							"Creation audiovisuelle : <strong>\"Commando\" - Shay - Realisateur : Guillaume Doubet</strong>"
+						]
+					},
+					jazz: {
+						date: "Date : 2024",
+						items: [
+							"Presidente d'honneur : <strong>Robin McKelle</strong>",
+							"Artiste instrumental(e) : <strong>Pierre de Bethmann</strong>",
+							"Artiste vocal(e) : <strong>Sandra Nkake</strong>",
+							"Revelation (Prix Frank Tenot) : <strong>Monsieur Mala</strong>",
+							"Concert : <strong>\"Les Egares\" Sissoko, Segal, Parisien, Peirani (Anteprima Productions/Mad Minute/Yes Les Guyzz/Molpe Music)</strong>",
+							"Album : <strong>\"Let Them Cook\" Emile Parisien Quartet (Act)</strong>",
+							"Album de musiques du monde : <strong>\"Bleu\" Ann O'aro (Cobalt)</strong>"
+						]
+					},
+					classique: {
+						date: "Date : 2024 - 31emes Victoires de la Musique Classique",
+						items: [
+							"Soliste instrumental(e) : <strong>Alexandre Kantorow, piano</strong>",
+							"Artiste lyrique : <strong>Benjamin Bernheim, tenor</strong>",
+							"Revelation, soliste instrumental(e) : <strong>Salome Gasselin, viole de gambe</strong>",
+							"Revelation, artiste lyrique : <strong>Juliette Mey, mezzo-soprano</strong>",
+							"Revelation, chef d'orchestre : <strong>Marie Jacquot</strong>",
+							"Compositeur : <strong>Florentine Mulsant - Le Chant du soleil, sonate pour piano a 4 mains</strong>",
+							"Enregistrement : <strong>\"Nicholas Angelich : Hommage\" - Nicholas Angelich, Quatuor Ebene, Martha Argerich, Myung-Whun Chung (Erato)</strong>"
+						]
+					}
+				},
+				2023: {
+					musique: {
+						date: "Date : 2023 - 38emes Victoires de la Musique",
+						items: [
+							"Artiste masculin : <strong>Stromae</strong>",
+							"Artiste feminine : <strong>Angele</strong>",
+							"Revelation masculine : <strong>Pierre De Maere</strong>",
+							"Revelation feminine : <strong>november ultra</strong>",
+							"Album : <strong>\"Multitude\" - Stromae</strong>",
+							"Chanson originale : <strong>\"La quete\" - OrelSan</strong>",
+							"Concert : <strong>OrelSan - \"Civilisation tour\" (Asterios Spectacles/Strong Ninja/7TH Magnitude)</strong>",
+							"Creation audiovisuelle : <strong>\"La quete\" - OrelSan - Realisateur : Victor Haegelin</strong>",
+							"Album le plus streame d'une artiste : <strong>\"Nonante-Cinq\" - Angele</strong>",
+							"Album le plus streame d'un artiste : <strong>\"Jefe\" - Ninho</strong>"
+						]
+					},
+					jazz: {
+						date: "Date : 2023",
+						items: [
+							"Artiste instrumental : <strong>Geraldine Laurent (saxophone)</strong>",
+							"Artiste vocal(e) : <strong>Camille Bertault / Hugh Coltman (2 ex-aequo)</strong>",
+							"Revelation (Prix Frank Tenot) : <strong>Jeanne Michard (saxophone)</strong>",
+							"Concert : <strong>Geraldine Laurent Quartet \"Cooking\" (Inclinaisons)</strong>",
+							"Album : <strong>\"Pedron Rubalcaba\" - Pierrick Pedron &amp; Gonzalo Rubalcaba (Gazebo)</strong>",
+							"Album de musiques du monde : <strong>\"Le Cri du Caire\" - Abdullah Miniawy, Peter Corser &amp; Karsten Hochapfel</strong>"
+						]
+					},
+					classique: {
+						date: "Date : 2023 - 30emes Victoires de la Musique Classique",
+						items: [
+							"Soliste instrumental(e) : <strong>Bertrand Chamayou, piano</strong>",
+							"Artiste lyrique : <strong>Marina Viotti, mezzo-soprano</strong>",
+							"Revelation, soliste instrumental(e) : <strong>Aurelien Pascal, violoncelle</strong>",
+							"Revelation, artiste lyrique : <strong>Alexandra Marcellier, soprano</strong>",
+							"Revelation, chef d'orchestre : <strong>Victor Jacob &amp; Lucie Leguay</strong>",
+							"Compositeur : <strong>Fabien Waksman - L'ile du temps, concerto pour accordeon et orchestre symphonique</strong>",
+							"Enregistrement : <strong>\"Matthaus-Passion\" J.S. Bach - Pygmalion, Raphael Pichon, Sabine Devieilhe, Lucie Richardot, Stephane Degout (Harmonia Mundi)</strong>"
+						]
+					}
+				},
+				2022: {
+					musique: {
+						date: "Date : 2022 - 37emes Victoires de la Musique",
+						items: [
+							"Artiste masculin : <strong>OrelSan</strong>",
+							"Artiste feminine : <strong>Clara Luciani</strong>",
+							"Revelation masculine : <strong>Terrenoire</strong>",
+							"Revelation feminine : <strong>Barbara Pravi</strong>",
+							"Album : <strong>\"Coeur\" - Clara Luciani</strong>",
+							"Chanson originale : <strong>\"L'odeur de l'essence\" - OrelSan</strong>",
+							"Concert : <strong>Ben Mazue - \"Paradis\" (Furax)</strong>",
+							"Creation audiovisuelle : <strong>\"Montre jamais ca a personne\" - OrelSan - Realisateurs : Clement Cotentin &amp; Christophe Offenstein</strong>"
+						]
+					},
+					jazz: {
+						date: "Date : 2022",
+						items: [
+							"Presidente d'honneur : <strong>Rhoda Scott</strong>",
+							"Victoire d'honneur : <strong>Christian Escoude</strong>",
+							"Artiste instrumental(e) : <strong>Sophie Alour</strong>",
+							"Artiste vocal(e) : <strong>Marion Rampal</strong>",
+							"Revelation (Prix Frank Tenot) : <strong>Arnaud Dolmen</strong>",
+							"Album : <strong>\"Ghost Song\" - Cecile McLorin Salvant (Nonesuch)</strong>",
+							"Album de musiques du monde : <strong>\"Shapes of the fall\" - Piers Faccini (Beating Drum/No Format!)</strong>"
+						]
+					},
+					classique: {
+						date: "Date : 2022 - 29emes Victoires de la Musique Classique",
+						items: [
+							"Soliste instrumental(e) : <strong>Emmanuelle Bertrand &amp; Sol Gabetta, violoncelle (ex aequo)</strong>",
+							"Artiste lyrique : <strong>Ludovic Tezier, baryton</strong>",
+							"Revelation, soliste instrumental(e) : <strong>Manon Galy, violon</strong>",
+							"Revelation, artiste lyrique : <strong>Eugenie Joneau, mezzo-soprano</strong>",
+							"Revelation, chef d'orchestre : <strong>Pierre Dumoussaud</strong>",
+							"Compositeur : <strong>Kaija Saariaho - Innocence, opera</strong>",
+							"Enregistrement : <strong>\"Cris\" - Thierry Escaich, Choeur et Maitrise de Radio France, Orchestre philharmonique de Radio France, Mikko Frank (Radio France)</strong>"
+						]
+					}
+				}
+			};
+
+			const years = [2026, 2025, 2024, 2023, 2022];
+			let currentIndex = 0;
+			let currentCategory = "musique";
+			let animating = false;
+
+			const yearEl = document.getElementById("palmaresYear");
+			const contentEl = document.getElementById("palmaresContent");
+			const upBtn = document.getElementById("palmaresUp");
+			const downBtn = document.getElementById("palmaresDown");
+			const categoryWrap = document.getElementById("palmaresCategoryWrap");
+			const categoryBtns = categoryWrap.querySelectorAll(".palmares-category-btn");
+
+			function getYearData(year) {
+				var entry = data[year];
+				if (!entry) return null;
+				if (entry.musique) return entry[currentCategory] || entry.musique;
+				return entry;
+			}
+
+			function buildContent(info) {
+				return '<p class="palmares-date">' + info.date + "</p>" +
+					'<ul class="palmares-list">' +
+					info.items.map(function (item) { return "<li>" + item + "</li>"; }).join("") +
+					"</ul>";
+			}
+
+			function showCategoryButtons(year) {
+				var entry = data[year];
+				categoryWrap.style.display = entry && entry.musique ? "flex" : "none";
+			}
+
+			categoryBtns.forEach(function (btn) {
+				btn.addEventListener("click", function () {
+					var cat = btn.dataset.category;
+					if (cat === currentCategory) return;
+					currentCategory = cat;
+					categoryBtns.forEach(function (b) { b.classList.remove("is-active"); });
+					btn.classList.add("is-active");
+
+					var info = getYearData(years[currentIndex]);
+					if (!info) return;
+
+					contentEl.classList.add("fade-out");
+					setTimeout(function () {
+						contentEl.innerHTML = buildContent(info);
+						contentEl.classList.remove("fade-out");
+						contentEl.classList.add("fade-in-prep");
+						contentEl.offsetHeight;
+						contentEl.classList.remove("fade-in-prep");
+
+						var items = contentEl.querySelectorAll("li");
+						items.forEach(function (li, i) {
+							li.style.opacity = "0";
+							li.style.transform = "translateY(10px)";
+							li.style.transition = "none";
+							setTimeout(function () {
+								li.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+								li.style.opacity = "1";
+								li.style.transform = "translateY(0)";
+							}, 40 * i);
+						});
+					}, 300);
+				});
+			});
+
+			function updateButtons() {
+				upBtn.style.opacity = currentIndex === 0 ? "0.3" : "1";
+				upBtn.style.pointerEvents = currentIndex === 0 ? "none" : "auto";
+				downBtn.style.opacity = currentIndex === years.length - 1 ? "0.3" : "1";
+				downBtn.style.pointerEvents = currentIndex === years.length - 1 ? "none" : "auto";
+			}
+
+			function animateTo(newIndex, direction) {
+				if (animating) return;
+				animating = true;
+
+				var year = years[newIndex];
+				var info = getYearData(year);
+				showCategoryButtons(year);
+
+				// direction: "up" means going to a more recent year, "down" means older
+				var slideOut = direction === "up" ? "slide-down-out" : "slide-up-out";
+				var slideInPrep = direction === "up" ? "slide-down-in" : "slide-up-in";
+
+				// 1) Slide year out
+				yearEl.classList.add(slideOut);
+
+				// 2) Fade content out
+				contentEl.classList.add("fade-out");
+
+				setTimeout(function () {
+					// Update year text
+					yearEl.textContent = year;
+					yearEl.classList.remove(slideOut);
+					yearEl.classList.add(slideInPrep);
+
+					// Force reflow
+					yearEl.offsetHeight;
+
+					// Slide year in
+					yearEl.classList.remove(slideInPrep);
+
+					// Update content
+					contentEl.innerHTML = buildContent(info);
+					contentEl.classList.remove("fade-out");
+					contentEl.classList.add("fade-in-prep");
+
+					// Force reflow
+					contentEl.offsetHeight;
+
+					// Fade content in
+					contentEl.classList.remove("fade-in-prep");
+
+					// Stagger list items
+					var items = contentEl.querySelectorAll("li");
+					items.forEach(function (li, i) {
+						li.style.opacity = "0";
+						li.style.transform = "translateY(10px)";
+						li.style.transition = "none";
+						setTimeout(function () {
+							li.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+							li.style.opacity = "1";
+							li.style.transform = "translateY(0)";
+						}, 40 * i);
+					});
+
+					// Also animate the date
+					var dateEl = contentEl.querySelector(".palmares-date");
+					if (dateEl) {
+						dateEl.style.opacity = "0";
+						dateEl.style.transform = "translateY(8px)";
+						dateEl.style.transition = "none";
+						setTimeout(function () {
+							dateEl.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+							dateEl.style.opacity = "1";
+							dateEl.style.transform = "translateY(0)";
+						}, 10);
+					}
+
+					currentIndex = newIndex;
+					updateButtons();
+
+					setTimeout(function () { animating = false; }, 400);
+				}, 350);
+			}
+
+			upBtn.addEventListener("click", function () {
+				if (currentIndex > 0) animateTo(currentIndex - 1, "up");
+			});
+
+			downBtn.addEventListener("click", function () {
+				if (currentIndex < years.length - 1) animateTo(currentIndex + 1, "down");
+			});
+
+			// Initial render without animation
+			yearEl.textContent = years[0];
+			contentEl.innerHTML = buildContent(getYearData(years[0]));
+			showCategoryButtons(years[0]);
+			updateButtons();
+		})();
+		</script>
+
+	</div>
+
+	<footer class="site-footer" aria-label="Pied de page">
+			<div class="site-footer-top">
+				<img class="footer-logo" src="assets/logos/LesVictoiresDeLaMusiqueEvenement.svg" alt="Les Victoires de la Musique" />
+
+				<nav class="footer-links" aria-label="Liens du footer">
+					<div class="footer-links-column">
+						<a href="#">Victoires De La Musique</a>
+						<a href="#">Victoires Du Jazz</a>
+						<a href="#">Victoires De La Musique Classique</a>
+					</div>
+					<div class="footer-links-column">
+						<a href="#">Associations</a>
+						<a href="#">Vote</a>
+					</div>
+				</nav>
+
+				<div class="footer-social" aria-label="Réseaux sociaux">
+					<a href="#" aria-label="Facebook"><img src="assets/icons/Facebook.svg" alt="" aria-hidden="true" /></a>
+					<a href="#" aria-label="Instagram"><img src="assets/icons/Instagram.svg" alt="" aria-hidden="true" /></a>
+					<a href="#" aria-label="TikTok"><img src="assets/icons/TikTok.svg" alt="" aria-hidden="true" /></a>
+					<a href="#" aria-label="YouTube"><img src="assets/icons/Youtube.svg" alt="" aria-hidden="true" /></a>
+				</div>
+			</div>
+
+			<div class="site-footer-bottom">
+				<div class="site-footer-bottom-wrap">
+					<p>©2026 Les Victoires de la Musique. Tous droits réservés.</p>
+					<a href="#">Mentions légales</a>
+				</div>
+			</div>
+		</footer>
+
+	<div class="mobile-menu-overlay" id="mobileMenuOverlay">
+		<a href="index.html">Victoires De La Musique</a>
+		<a href="index.html?theme=jazz">Victoires Du Jazz</a>
+		<a href="index.html?theme=classique">Victoires De La Musique Classique</a>
+		<a href="associations.html" class="nav-active">L'association</a>
+		<div class="nav-dropdown">
+			<a href="#" class="nav-dropdown-toggle">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+			<div class="nav-dropdown-menu">
+				<a href="vote.html">Musique</a>
+				<a href="#">Jazz</a>
+				<a href="#">Musique Classique</a>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	// Burger menu
+	(function () {
+		var burgerBtn = document.getElementById("burgerBtn");
+		var overlay = document.getElementById("mobileMenuOverlay");
+		if (!burgerBtn || !overlay) return;
+
+		function toggle() {
+			var isOpen = burgerBtn.classList.toggle("is-open");
+			overlay.classList.toggle("is-menu-open", isOpen);
+			document.body.classList.toggle("menu-blur", isOpen);
+			burgerBtn.setAttribute("aria-expanded", String(isOpen));
+			document.body.style.overflow = isOpen ? "hidden" : "";
+		}
+
+		burgerBtn.addEventListener("click", toggle);
+
+		overlay.addEventListener("click", function (e) {
+			var link = e.target.closest("a:not(.nav-dropdown-toggle)");
+			if (!link) return;
+			if (burgerBtn.classList.contains("is-open")) toggle();
+		});
+
+		overlay.querySelectorAll(".nav-dropdown").forEach(function (dropdown) {
+			var ddToggle = dropdown.querySelector(".nav-dropdown-toggle");
+			if (!ddToggle) return;
+			ddToggle.addEventListener("click", function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				dropdown.classList.toggle("is-open");
+			});
+		});
+	})();
+
+	// Dropdown Vote (desktop navbar only)
+	(function () {
+		var navbarEl = document.getElementById("liquidNavbar");
+		if (!navbarEl) return;
+		navbarEl.querySelectorAll(".nav-dropdown").forEach(function (dropdown) {
+			var toggle = dropdown.querySelector(".nav-dropdown-toggle");
+			if (!toggle) return;
+
+			toggle.addEventListener("click", function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var wasOpen = dropdown.classList.contains("is-open");
+				navbarEl.querySelectorAll(".nav-dropdown.is-open").forEach(function (d) {
+					d.classList.remove("is-open");
+				});
+				if (!wasOpen) dropdown.classList.add("is-open");
+			});
+		});
+
+		document.addEventListener("click", function (e) {
+			if (!e.target.closest("#liquidNavbar")) {
+				navbarEl.querySelectorAll(".nav-dropdown.is-open").forEach(function (d) {
+					d.classList.remove("is-open");
+				});
+			}
+		});
+	})();
+	</script>
+</body>
+</html>

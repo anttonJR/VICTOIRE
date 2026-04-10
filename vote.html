@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Vote | Les Victoires</title>
+	<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+	<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" />
+	<style>
+		:root {
+			--bg: #000000;
+			--text: #ffffff;
+			--glass-bg: rgba(255, 255, 255, 0.12);
+			--glass-border: rgba(255, 255, 255, 0.24);
+			--theme-color: #cf1a1e;
+			--theme-gradient-start: #e60012;
+			--theme-gradient-end: #8b0008;
+			--theme-vote-color: #d10612;
+		}
+
+		body[data-theme="jazz"] {
+			--theme-color: #d4920e;
+			--theme-gradient-start: #d4920e;
+			--theme-gradient-end: #8a5a02;
+			--theme-vote-color: #d4920e;
+		}
+
+		body[data-theme="classique"] {
+			--theme-color: #2e1ed4;
+			--theme-gradient-start: #2e1ed4;
+			--theme-gradient-end: #0c0080;
+			--theme-vote-color: #2e1ed4;
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		body {
+			width: 100%;
+			min-height: 100%;
+		}
+
+		html,
+		body,
+		body *,
+		body *::before,
+		body *::after {
+			font-family: "Satoshi", sans-serif !important;
+		}
+
+		body {
+			font-family: "Satoshi", sans-serif;
+			background: var(--bg);
+			color: var(--text);
+		}
+
+		.page {
+			max-width: 1500px;
+			margin: 0 auto;
+			padding: 36px 72px 64px;
+		}
+
+		.navbar-wrap {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 42px;
+			position: relative;
+			z-index: 200;
+		}
+
+		.navbar {
+			position: relative;
+			display: inline-flex;
+			align-items: center;
+			gap: 0;
+			padding: 8px 10px;
+			border-radius: 0;
+			border: 1px solid var(--glass-border);
+			background:
+				linear-gradient(180deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.05)),
+				var(--glass-bg);
+			backdrop-filter: blur(14px) saturate(145%);
+			-webkit-backdrop-filter: blur(14px) saturate(145%);
+			box-shadow:
+				inset 0 1px 1px rgba(255, 255, 255, 0.149),
+				inset 0 -8px 20px rgba(0, 0, 0, 0.2),
+				0 10px 26px rgba(40, 0, 0, 0.28);
+			overflow: visible;
+			transform-style: preserve-3d;
+			transition: transform 220ms ease;
+		}
+
+		.navbar::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.28) 50%, transparent 78%);
+			transform: translateX(-125%);
+			transition: transform 650ms ease;
+			pointer-events: none;
+		}
+
+		.navbar.is-shiny::before {
+			transform: translateX(125%);
+		}
+
+		.navbar a {
+			color: #fff5f5;
+			text-decoration: none;
+			font-weight: 500;
+			line-height: 1;
+			font-size: clamp(12px, 1.18vw, 14px);
+			letter-spacing: 0.01em;
+			padding: 10px 14px;
+			border-radius: 0;
+			white-space: nowrap;
+			transition: background-color 180ms ease, color 180ms ease;
+		}
+
+		.navbar a:hover {
+			background: rgba(255, 255, 255, 0.17);
+			border-radius: 0;
+			color: #ffffff;
+		}
+
+		.navbar a.nav-active {
+			background: rgba(255, 255, 255, 0.22);
+			border-radius: 0;
+			color: #ffffff;
+		}
+
+		.nav-dropdown {
+			position: relative;
+		}
+
+		.nav-dropdown-toggle {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		.nav-dropdown-arrow {
+			transition: transform 0.25s ease;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.nav-dropdown.is-open .nav-dropdown-arrow {
+			transform: rotate(180deg);
+		}
+
+		.nav-dropdown-menu {
+			position: absolute;
+			top: calc(100% + 12px);
+			right: 0;
+			transform: translateY(8px);
+			min-width: 200px;
+			background:
+				linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)),
+				rgba(255, 255, 255, 0.08);
+			border: 1px solid var(--glass-border);
+			backdrop-filter: blur(10px) saturate(120%);
+			-webkit-backdrop-filter: blur(10px) saturate(120%);
+			border-radius: 0;
+			padding: 6px 0;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.25s ease, transform 0.25s ease;
+			z-index: 100;
+			box-shadow:
+				inset 0 1px 0 rgba(255, 255, 255, 0.12),
+				0 8px 20px rgba(0, 0, 0, 0.3);
+			overflow: hidden;
+		}
+
+		.nav-dropdown.is-open .nav-dropdown-menu {
+			opacity: 1;
+			pointer-events: auto;
+			transform: translateY(0);
+		}
+
+		.nav-dropdown-menu a {
+			display: block;
+			padding: 10px 18px !important;
+			font-size: clamp(12px, 1.18vw, 14px) !important;
+			font-weight: 500;
+			color: #fff5f5;
+			white-space: nowrap;
+			transition: background 0.18s ease, color 0.18s ease;
+		}
+
+		.nav-dropdown-menu a:hover {
+			background: rgba(255, 255, 255, 0.17);
+			color: #ffffff;
+		}
+
+		.vote-hero {
+			position: relative;
+			min-height: calc(100vh - 150px);
+			display: grid;
+			place-items: start center;
+			padding-top: clamp(26px, 5vh, 74px);
+			isolation: isolate;
+			overflow: visible;
+		}
+
+		.vote-hero::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: url("assets/TROPHE_SVG.svg") no-repeat center center;
+			background-size: contain;
+			opacity: 0.72;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		.vote-title {
+			position: relative;
+			z-index: 1;
+			text-align: center;
+			font-weight: 900;
+			line-height: 0.92;
+			letter-spacing: -0.04em;
+			font-size: clamp(62px, 10vw, 108px);
+			text-transform: none;
+		}
+
+		.vote-title .top {
+			display: block;
+			color: #ffffff;
+		}
+
+		.vote-title .mid {
+			display: block;
+			color: #ffffff;
+			margin-bottom: 16px;
+		}
+
+		.vote-title .bottom {
+			display: block;
+			background: linear-gradient(180deg, var(--theme-gradient-start) 0%, var(--theme-gradient-end) 100%);
+			-webkit-background-clip: text;
+			background-clip: text;
+			color: transparent;
+		}
+
+		.vote-candidates {
+			max-width: 860px;
+			margin: 26px auto 0;
+			padding: 22px 0 24px;
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: clamp(18px, 2.6vw, 40px);
+		}
+
+		.candidate-card {
+			display: grid;
+			justify-items: center;
+			gap: 14px;
+		}
+
+		.candidate-frame {
+			background: #ffffff;
+			padding: 10px 5px 8px;
+			width: 240px;
+			max-width: 100%;
+		}
+
+		.candidate-name {
+			text-align: center;
+			font-size: clamp(22px, 1.6vw, 30px);
+			font-weight: 700;
+			line-height: 1;
+			color: #0e0e0e;
+			margin-bottom: 10px;
+		}
+
+		.candidate-photo {
+			display: block;
+			width: 100%;
+			height: 300px;
+			object-fit: cover;
+		}
+
+		.candidate-vote {
+			width: 240px;
+			max-width: 100%;
+			border: 0;
+			background: #ffffff;
+			color: var(--theme-vote-color);
+			font-size: clamp(32px, 2.2vw, 42px);
+			font-weight: 700;
+			line-height: 1;
+			padding: 12px 10px 14px;
+			cursor: pointer;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+		}
+
+		.candidate-vote svg {
+			width: clamp(30px, 2.2vw, 40px);
+			height: clamp(30px, 2.2vw, 40px);
+			margin-right: 4px;
+		}
+
+		.candidate-vote:hover {
+			filter: brightness(0.96);
+		}
+
+		.vote-title .bottom,
+		.vote-footer-visual,
+		.vote-footer-visual::after,
+		.site-footer {
+			transition: background 0.4s ease;
+		}
+
+		.candidate-vote {
+			transition: color 0.4s ease;
+		}
+
+		.vote-candidates.is-switching {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+
+		.vote-candidates {
+			transition: opacity 0.3s ease, transform 0.3s ease;
+		}
+
+		.vote-title .bottom.is-switching {
+			opacity: 0;
+		}
+
+		.vote-title .bottom {
+			transition: background 0.4s ease, opacity 0.3s ease;
+		}
+
+		.vote-footer-visual {
+			position: relative;
+			min-height: 340px;
+			margin: 0;
+			padding: 0;
+			display: block;
+			background:
+				linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, var(--theme-color) 100%),
+				url("assets/vote/VOTE_FOOTER_PHOTO.png") center top / cover no-repeat;
+			isolation: isolate;
+		}
+
+		.vote-footer-visual::after {
+			content: "";
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 44%;
+			background: linear-gradient(180deg, transparent 0%, var(--theme-color) 100%);
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		.site-footer {
+			margin: 0;
+			padding: 0;
+			background: var(--theme-color);
+		}
+
+		.site-footer-top {
+			max-width: 1260px;
+			margin: 0 auto;
+			padding: clamp(30px, 4vw, 46px) clamp(14px, 2vw, 28px) clamp(34px, 4vw, 50px);
+			display: grid;
+			grid-template-columns: minmax(250px, 1.2fr) minmax(240px, 0.9fr) auto;
+			gap: clamp(18px, 4vw, 72px);
+			align-items: center;
+		}
+
+		.footer-logo {
+			width: clamp(200px, 26vw, 380px);
+			margin-left: clamp(-120px, -10vw, -62px);
+			height: auto;
+		}
+
+		.footer-links {
+			display: flex;
+			align-items: flex-start;
+			gap: clamp(26px, 4vw, 56px);
+			margin-left: clamp(-56px, -4.8vw, -24px);
+		}
+
+		.footer-links-column {
+			display: grid;
+			gap: 8px;
+		}
+
+		.footer-links a {
+			color: #ffffff;
+			text-decoration: underline;
+			text-underline-offset: 3px;
+			font-size: clamp(14px, 1vw, 20px);
+			font-weight: 500;
+			line-height: 1.2;
+			white-space: nowrap;
+		}
+
+		.footer-social {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.footer-social a {
+			width: clamp(40px, 3vw, 48px);
+			height: clamp(40px, 3vw, 48px);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid #ffffff;
+			border-radius: 999px;
+			color: #ffffff;
+			text-decoration: none;
+			font-size: clamp(16px, 1.15vw, 18px);
+			font-weight: 700;
+			line-height: 1;
+		}
+
+		.footer-social img {
+			width: 56%;
+			height: 56%;
+			object-fit: contain;
+			display: block;
+		}
+
+		.site-footer-bottom {
+			background: #000000;
+		}
+
+		.site-footer-bottom-wrap {
+			max-width: 1260px;
+			margin: 0 auto;
+			padding: 16px clamp(14px, 2vw, 28px);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 14px;
+			color: rgba(255, 255, 255, 0.92);
+			font-size: 13px;
+		}
+
+		.site-footer-bottom a {
+			color: #ffffff;
+			text-decoration: none;
+			font-size: clamp(16px, 1.35vw, 20px);
+			font-weight: 500;
+		}
+
+		@media (max-width: 1180px) {
+			.page {
+				padding-left: 34px;
+				padding-right: 34px;
+			}
+		}
+
+		@media (max-width: 980px) {
+			.navbar {
+				max-width: calc(100vw - 20px);
+				flex-wrap: wrap;
+				scrollbar-width: none;
+			}
+
+			.navbar::-webkit-scrollbar {
+				display: none;
+			}
+
+			.vote-hero::before {
+				background-size: min(90vw, 760px);
+				background-position: center 62%;
+			}
+		}
+
+		@media (max-width: 840px) {
+			.page {
+				padding: 20px 14px 40px;
+			}
+
+			.navbar-wrap {
+				margin-bottom: 42px;
+			}
+
+			.vote-hero {
+				min-height: calc(100vh - 120px);
+				padding-top: 30px;
+			}
+
+			.vote-title {
+				font-size: clamp(48px, 14vw, 72px);
+				line-height: 0.94;
+			}
+
+			.vote-candidates {
+				grid-template-columns: 1fr;
+				justify-items: center;
+				margin-top: 18px;
+				gap: 22px;
+			}
+
+			.candidate-frame,
+			.candidate-vote {
+				width: min(100%, 320px);
+			}
+
+			.candidate-name {
+				font-size: clamp(28px, 8vw, 36px);
+			}
+
+			.candidate-photo {
+				height: 450px;
+			}
+
+			.candidate-vote {
+				font-size: clamp(36px, 11vw, 48px);
+			}
+
+			.vote-footer-visual {
+				min-height: 260px;
+				margin-top: 0;
+			}
+
+			.site-footer-top {
+				grid-template-columns: 1fr;
+				gap: 20px;
+				justify-items: start;
+			}
+
+			.footer-logo {
+				margin-left: 0;
+				width: clamp(180px, 60vw, 260px);
+			}
+
+			.footer-links {
+				margin-left: 0;
+				gap: 24px;
+			}
+
+			.footer-links-column {
+				gap: 6px;
+			}
+
+			.footer-links a {
+				font-size: 15px;
+			}
+
+			.site-footer-bottom-wrap {
+				flex-direction: column;
+				align-items: flex-start;
+				padding: 14px 12px 18px;
+			}
+
+			.site-footer-bottom a {
+				font-size: 15px;
+			}
+		}
+
+		.burger-btn {
+			display: none;
+		}
+
+		.mobile-menu-overlay {
+			display: none;
+		}
+
+		@media (max-width: 680px) {
+			.burger-btn {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 5px;
+				width: 44px;
+				height: 44px;
+				padding: 0;
+				border: 1px solid var(--glass-border);
+				border-radius: 0;
+				background:
+					linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.05)),
+					var(--glass-bg);
+				backdrop-filter: blur(14px) saturate(145%);
+				-webkit-backdrop-filter: blur(14px) saturate(145%);
+				cursor: pointer;
+				position: fixed;
+				top: 18px;
+				right: 16px;
+				z-index: 200;
+				transition: background-color 200ms ease;
+			}
+
+			.burger-line {
+				display: block;
+				width: 20px;
+				height: 2px;
+				background: #ffffff;
+				border-radius: 2px;
+				transition: transform 300ms ease, opacity 200ms ease;
+			}
+
+			.burger-btn.is-open .burger-line:nth-child(1) {
+				transform: translateY(7px) rotate(45deg);
+			}
+
+			.burger-btn.is-open .burger-line:nth-child(2) {
+				opacity: 0;
+			}
+
+			.burger-btn.is-open .burger-line:nth-child(3) {
+				transform: translateY(-7px) rotate(-45deg);
+			}
+
+			.navbar {
+				display: none;
+			}
+
+			.mobile-menu-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 100;
+				display: flex;
+				flex-direction: column;
+				align-items: stretch;
+				justify-content: center;
+				gap: 0;
+				padding: 60px 24px 40px;
+				background: rgba(0, 0, 0, 0.45);
+				opacity: 0;
+				visibility: hidden;
+				transition: opacity 300ms ease, visibility 300ms ease;
+				overflow-y: auto;
+				overflow-x: hidden;
+			}
+
+			.mobile-menu-overlay.is-menu-open {
+				opacity: 1;
+				visibility: visible;
+			}
+
+			.mobile-menu-overlay a {
+				color: #fff5f5;
+				text-decoration: none;
+				padding: 16px 0;
+				font-size: 20px;
+				font-weight: 600;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+				white-space: normal;
+				display: block;
+			}
+
+			.mobile-menu-overlay a:last-child,
+			.mobile-menu-overlay .nav-dropdown:last-child {
+				border-bottom: none;
+			}
+
+			.mobile-menu-overlay a:hover,
+			.mobile-menu-overlay a.nav-active {
+				color: var(--theme-vote-color, #cf1a1e);
+			}
+
+			.mobile-menu-overlay .nav-dropdown {
+				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+			}
+
+			.mobile-menu-overlay .nav-dropdown-toggle {
+				padding: 16px 0;
+				font-size: 20px;
+				font-weight: 600;
+				color: #fff5f5;
+			}
+
+			.mobile-menu-overlay .nav-dropdown-menu {
+				position: static;
+				transform: none;
+				background: transparent;
+				border: none;
+				backdrop-filter: none;
+				-webkit-backdrop-filter: none;
+				box-shadow: none;
+				padding: 0 0 8px 16px;
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			.mobile-menu-overlay .nav-dropdown:not(.is-open) .nav-dropdown-menu {
+				opacity: 0;
+				pointer-events: none;
+				max-height: 0;
+				overflow: hidden;
+				padding: 0;
+			}
+
+			.mobile-menu-overlay .nav-dropdown-menu a {
+				padding: 12px 0;
+				font-size: 17px;
+				border-bottom: none;
+			}
+
+			body.menu-blur .page,
+			body.menu-blur .vote-footer-visual,
+			body.menu-blur .site-footer {
+				filter: blur(18px);
+				pointer-events: none;
+				transition: filter 300ms ease;
+			}
+
+			body.menu-blur .burger-btn {
+				filter: none;
+				pointer-events: auto;
+			}
+
+			.vote-hero::before {
+				background-size: 110vw;
+				background-position: center 70%;
+				opacity: 0.3;
+			}
+		}
+	</style>
+</head>
+<body>
+	<button class="burger-btn" id="burgerBtn" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+		<span class="burger-line"></span>
+		<span class="burger-line"></span>
+		<span class="burger-line"></span>
+	</button>
+	<div class="page">
+		<div class="navbar-wrap">
+			<nav class="navbar" id="liquidNavbar" aria-label="Navigation principale">
+				<a href="index.html">Victoires De La Musique</a>
+				<a href="index.html?theme=jazz">Victoires Du Jazz</a>
+				<a href="index.html?theme=classique">Victoires De La Musique Classique</a>
+				<a href="associations.html">L'association</a>
+				<div class="nav-dropdown">
+					<a href="#" class="nav-dropdown-toggle nav-active">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+					<div class="nav-dropdown-menu">
+						<a href="#" data-vote-theme="musique">Musique</a>
+						<a href="#" data-vote-theme="jazz">Jazz</a>
+						<a href="#" data-vote-theme="classique">Musique Classique</a>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+		<section class="vote-hero" aria-label="Section hero vote">
+			<h1 class="vote-title">
+				<span class="top">Choisis le</span>
+				<span class="mid">gagnant des</span>
+				<span class="bottom">Victoires de<br />la Musique</span>
+			</h1>
+		</section>
+
+		<section class="vote-candidates" aria-label="Candidats vote musique">
+			<article class="candidate-card">
+				<div class="candidate-frame">
+					<h2 class="candidate-name">Theodora</h2>
+					<img class="candidate-photo" src="assets/vote/Vote_musique_theodora.png" alt="Theodora" loading="lazy" />
+				</div>
+				<button class="candidate-vote" type="button" aria-label="Voter pour Theodora"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none"><path d="M43.75 16.6665V43.7498H6.25V16.6665" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M47.9154 6.25H2.08203V16.6667H47.9154V6.25Z" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.832 25H29.1654" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg> Voter</button>
+			</article>
+
+			<article class="candidate-card">
+				<div class="candidate-frame">
+					<h2 class="candidate-name">Disiz</h2>
+					<img class="candidate-photo" src="assets/vote/Vote_musique_disiz.png" alt="Disiz" loading="lazy" />
+				</div>
+				<button class="candidate-vote" type="button" aria-label="Voter pour Disiz"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none"><path d="M43.75 16.6665V43.7498H6.25V16.6665" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M47.9154 6.25H2.08203V16.6667H47.9154V6.25Z" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.832 25H29.1654" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg> Voter</button>
+			</article>
+
+			<article class="candidate-card">
+				<div class="candidate-frame">
+					<h2 class="candidate-name">Helena</h2>
+					<img class="candidate-photo" src="assets/vote/Vote_musique_Helena.png" alt="Helena" loading="lazy" />
+				</div>
+				<button class="candidate-vote" type="button" aria-label="Voter pour Helena"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none"><path d="M43.75 16.6665V43.7498H6.25V16.6665" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M47.9154 6.25H2.08203V16.6667H47.9154V6.25Z" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.832 25H29.1654" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg> Voter</button>
+			</article>
+		</section>
+
+	</div>
+
+	<section class="vote-footer-visual" aria-label="Image de bas de page">
+	</section>
+
+	<footer class="site-footer" aria-label="Pied de page">
+		<div class="site-footer-top">
+			<img class="footer-logo" src="assets/logos/LesVictoiresDeLaMusiqueEvenement.svg" alt="Les Victoires de la Musique" />
+
+			<nav class="footer-links" aria-label="Liens du footer">
+				<div class="footer-links-column">
+					<a href="#">Victoires De La Musique</a>
+					<a href="#">Victoires Du Jazz</a>
+					<a href="#">Victoires De La Musique Classique</a>
+				</div>
+				<div class="footer-links-column">
+					<a href="#">Associations</a>
+					<a href="#">Vote</a>
+				</div>
+			</nav>
+
+			<div class="footer-social" aria-label="Réseaux sociaux">
+				<a href="#" aria-label="Facebook"><img src="assets/icons/Facebook.svg" alt="" aria-hidden="true" /></a>
+				<a href="#" aria-label="Instagram"><img src="assets/icons/Instagram.svg" alt="" aria-hidden="true" /></a>
+				<a href="#" aria-label="TikTok"><img src="assets/icons/TikTok.svg" alt="" aria-hidden="true" /></a>
+				<a href="#" aria-label="YouTube"><img src="assets/icons/Youtube.svg" alt="" aria-hidden="true" /></a>
+			</div>
+		</div>
+
+		<div class="site-footer-bottom">
+			<div class="site-footer-bottom-wrap">
+				<p>©2026 Les Victoires de la Musique. Tous droits réservés.</p>
+				<a href="#">Mentions légales</a>
+			</div>
+		</div>
+	</footer>
+
+	<div class="mobile-menu-overlay" id="mobileMenuOverlay">
+		<a href="index.html">Victoires De La Musique</a>
+		<a href="index.html?theme=jazz">Victoires Du Jazz</a>
+		<a href="index.html?theme=classique">Victoires De La Musique Classique</a>
+		<a href="associations.html">L'association</a>
+		<div class="nav-dropdown">
+			<a href="#" class="nav-dropdown-toggle nav-active">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+			<div class="nav-dropdown-menu">
+				<a href="#" data-vote-theme="musique">Musique</a>
+				<a href="#" data-vote-theme="jazz">Jazz</a>
+				<a href="#" data-vote-theme="classique">Musique Classique</a>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Burger menu
+		(function () {
+			var burgerBtn = document.getElementById("burgerBtn");
+			var overlay = document.getElementById("mobileMenuOverlay");
+			if (!burgerBtn || !overlay) return;
+
+			function toggle() {
+				var isOpen = burgerBtn.classList.toggle("is-open");
+				overlay.classList.toggle("is-menu-open", isOpen);
+				document.body.classList.toggle("menu-blur", isOpen);
+				burgerBtn.setAttribute("aria-expanded", String(isOpen));
+				document.body.style.overflow = isOpen ? "hidden" : "";
+			}
+
+			burgerBtn.addEventListener("click", toggle);
+
+			overlay.addEventListener("click", function (e) {
+				var link = e.target.closest("a:not(.nav-dropdown-toggle)");
+				if (!link) return;
+				if (burgerBtn.classList.contains("is-open")) toggle();
+			});
+
+			overlay.querySelectorAll(".nav-dropdown").forEach(function (dropdown) {
+				var ddToggle = dropdown.querySelector(".nav-dropdown-toggle");
+				if (!ddToggle) return;
+				ddToggle.addEventListener("click", function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+					dropdown.classList.toggle("is-open");
+				});
+			});
+		})();
+
+		// Dropdown Vote (desktop navbar only)
+		(function () {
+			var navbarEl = document.getElementById("liquidNavbar");
+			if (!navbarEl) return;
+			navbarEl.querySelectorAll(".nav-dropdown").forEach(function (dropdown) {
+				var toggle = dropdown.querySelector(".nav-dropdown-toggle");
+				if (!toggle) return;
+
+				toggle.addEventListener("click", function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+					var isOpen = dropdown.classList.contains("is-open");
+					navbarEl.querySelectorAll(".nav-dropdown.is-open").forEach(function (d) {
+						d.classList.remove("is-open");
+					});
+					if (!isOpen) dropdown.classList.add("is-open");
+				});
+			});
+
+			document.addEventListener("click", function (e) {
+				if (!e.target.closest("#liquidNavbar")) {
+					navbarEl.querySelectorAll(".nav-dropdown.is-open").forEach(function (d) {
+						d.classList.remove("is-open");
+					});
+				}
+			});
+		})();
+
+		(function () {
+			var svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none"><path d="M43.75 16.6665V43.7498H6.25V16.6665" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M47.9154 6.25H2.08203V16.6667H47.9154V6.25Z" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.832 25H29.1654" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+			var themes = {
+				musique: {
+					title: "Victoires de<br />la Musique",
+					candidates: [
+						{ name: "Theodora", photo: "assets/vote/Vote_musique_theodora.png" },
+						{ name: "Disiz", photo: "assets/vote/Vote_musique_disiz.png" },
+						{ name: "Helena", photo: "assets/vote/Vote_musique_Helena.png" }
+					],
+					footerLogo: "assets/logos/LesVictoiresDeLaMusiqueEvenement.svg"
+				},
+				jazz: {
+					title: "Victoires<br />du Jazz",
+					candidates: [
+						{ name: "Arnaud Dolmen", photo: "assets/artistes/Carroussel_Jazz_Arnaud_Dolmen.png" },
+						{ name: "Célia Kameni", photo: "assets/artistes/Carroussel_Jazz_Célia_Kameni.png" },
+						{ name: "Adèle Viret", photo: "assets/artistes/Carroussel_Jazz_Adèle_Viret.png" }
+					],
+					footerLogo: "assets/logos/LesVictoiresDeLaMusiqueJazz.svg"
+				},
+				classique: {
+					title: "Victoires de la<br />Musique Classique",
+					candidates: [
+						{ name: "Sabine Devieilhe", photo: "assets/artistes/Carroussel_Classique_Sabine_Devieilhe.png" },
+						{ name: "Adélaide Ferrière", photo: "assets/artistes/Carroussel_Classique_Adélaide_Ferrière.png" },
+						{ name: "Arielle Beck", photo: "assets/artistes/Carroussel_Classique_Arielle_Beck.png" }
+					],
+					footerLogo: "assets/logos/LesVictoiresDeLaMusiqueClassiqueEvenement.svg"
+				}
+			};
+
+			var currentTheme = "musique";
+
+			function switchVoteTheme(themeName) {
+				if (themeName === currentTheme) return;
+				var theme = themes[themeName];
+				if (!theme) return;
+				currentTheme = themeName;
+
+				// Fade out title and candidates first
+				var bottomTitle = document.querySelector(".vote-title .bottom");
+				var candidatesSection = document.querySelector(".vote-candidates");
+
+				if (bottomTitle) bottomTitle.classList.add("is-switching");
+				if (candidatesSection) candidatesSection.classList.add("is-switching");
+
+				// After fade out, change theme + content together
+				setTimeout(function () {
+					document.body.setAttribute("data-theme", themeName === "musique" ? "" : themeName);
+					if (themeName === "musique") document.body.removeAttribute("data-theme");
+
+					if (bottomTitle) {
+						bottomTitle.innerHTML = theme.title;
+						bottomTitle.classList.remove("is-switching");
+					}
+
+					if (candidatesSection) {
+						candidatesSection.innerHTML = "";
+						theme.candidates.forEach(function (c) {
+							var article = document.createElement("article");
+							article.className = "candidate-card";
+							article.innerHTML =
+								'<div class="candidate-frame">' +
+									'<h2 class="candidate-name">' + c.name + '</h2>' +
+									'<img class="candidate-photo" src="' + c.photo + '" alt="' + c.name + '" loading="lazy" />' +
+								'</div>' +
+								'<button class="candidate-vote" type="button" aria-label="Voter pour ' + c.name + '">' + svgIcon + ' Voter</button>';
+							candidatesSection.appendChild(article);
+						});
+						candidatesSection.classList.remove("is-switching");
+					}
+
+					// Update footer logo
+					var footerLogo = document.querySelector(".footer-logo");
+					if (footerLogo) {
+						footerLogo.src = theme.footerLogo;
+					}
+				}, 300);
+			}
+
+			// Listen to dropdown clicks
+			document.querySelectorAll("[data-vote-theme]").forEach(function (link) {
+				link.addEventListener("click", function (e) {
+					e.preventDefault();
+					switchVoteTheme(link.dataset.voteTheme);
+					document.querySelectorAll(".nav-dropdown.is-open").forEach(function (d) {
+						d.classList.remove("is-open");
+					});
+				});
+			});
+
+			// Apply theme from URL parameter
+			var urlTheme = new URLSearchParams(window.location.search).get("theme");
+			if (urlTheme && urlTheme !== currentTheme) {
+				switchVoteTheme(urlTheme);
+			}
+		})();
+	</script>
+</body>
+</html>
