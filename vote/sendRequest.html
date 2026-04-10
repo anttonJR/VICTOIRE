@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn1">voter 1</button>
+    <button>voter 2</button>
+    <button>voter 3</button>
+    <script>
+        const btn1 = document.getElementById('btn1');
+        btn1.addEventListener('click', function() {
+            const mail   = prompt('Donne ton mail !');
+            console.log("ton mail est = " + mail);
+        });
+
+        // pour envoyer une requete en js
+        // sur la page http://localhost:8888/my_form.php
+        // et la valeur name="jp" via la méthode post
+        fetch('http://localhost:8888/my_form.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'vote=madona&mail=' + mail,
+        })        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    </script>
+</body>
+</html>

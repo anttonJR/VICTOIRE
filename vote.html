@@ -570,6 +570,148 @@
 			}
 		}
 
+		/* ── Modal vote ─────────────────────────────────────── */
+		.vote-modal-overlay {
+			position: fixed;
+			inset: 0;
+			z-index: 500;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(0, 0, 0, 0.55);
+			backdrop-filter: blur(14px) saturate(130%);
+			-webkit-backdrop-filter: blur(14px) saturate(130%);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 280ms ease;
+		}
+
+		.vote-modal-overlay.is-open {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		.vote-modal {
+			background: rgba(18, 18, 18, 0.92);
+			border: 1px solid var(--glass-border);
+			box-shadow:
+				inset 0 1px 1px rgba(255, 255, 255, 0.1),
+				0 20px 60px rgba(0, 0, 0, 0.6);
+			padding: clamp(28px, 5vw, 48px) clamp(24px, 5vw, 56px);
+			width: min(480px, calc(100vw - 32px));
+			display: grid;
+			gap: 20px;
+			transform: translateY(16px) scale(0.97);
+			transition: transform 280ms ease;
+			position: relative;
+		}
+
+		.vote-modal-overlay.is-open .vote-modal {
+			transform: translateY(0) scale(1);
+		}
+
+		.vote-modal-close {
+			position: absolute;
+			top: 14px;
+			right: 16px;
+			background: transparent;
+			border: none;
+			color: rgba(255, 255, 255, 0.5);
+			font-size: 24px;
+			line-height: 1;
+			cursor: pointer;
+			padding: 4px 8px;
+			transition: color 180ms ease;
+		}
+
+		.vote-modal-close:hover {
+			color: #ffffff;
+		}
+
+		.vote-modal-title {
+			font-size: clamp(20px, 2vw, 26px);
+			font-weight: 700;
+			line-height: 1.2;
+			color: #ffffff;
+		}
+
+		.vote-modal-title span {
+			color: var(--theme-vote-color);
+		}
+
+		.vote-modal label {
+			display: block;
+			font-size: 13px;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.6);
+			margin-bottom: 8px;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+		}
+
+		.vote-modal input[type="email"] {
+			width: 100%;
+			background: rgba(255, 255, 255, 0.07);
+			border: 1px solid var(--glass-border);
+			color: #ffffff;
+			font-family: "Satoshi", sans-serif;
+			font-size: 16px;
+			padding: 12px 14px;
+			outline: none;
+			transition: border-color 180ms ease, background 180ms ease;
+		}
+
+		.vote-modal input[type="email"]::placeholder {
+			color: rgba(255, 255, 255, 0.3);
+		}
+
+		.vote-modal input[type="email"]:focus {
+			border-color: var(--theme-vote-color);
+			background: rgba(255, 255, 255, 0.11);
+		}
+
+		.vote-modal-submit {
+			width: 100%;
+			border: 0;
+			background: var(--theme-vote-color);
+			color: #ffffff;
+			font-family: "Satoshi", sans-serif;
+			font-size: clamp(16px, 1.5vw, 20px);
+			font-weight: 700;
+			padding: 14px 10px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			transition: filter 180ms ease;
+		}
+
+		.vote-modal-submit:hover {
+			filter: brightness(1.12);
+		}
+
+		.vote-modal-submit:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+		.vote-modal-feedback {
+			font-size: 14px;
+			font-weight: 500;
+			min-height: 20px;
+			text-align: center;
+		}
+
+		.vote-modal-feedback.success {
+			color: #4cde80;
+		}
+
+		.vote-modal-feedback.error {
+			color: #ff6b6b;
+		}
+		/* ────────────────────────────────────────────────────── */
+
 		.burger-btn {
 			display: none;
 		}
@@ -829,6 +971,25 @@
 		</div>
 	</footer>
 
+	<!-- Modal vote par email -->
+	<div class="vote-modal-overlay" id="voteModalOverlay" role="dialog" aria-modal="true" aria-labelledby="voteModalTitle">
+		<div class="vote-modal">
+			<button class="vote-modal-close" id="voteModalClose" aria-label="Fermer">&#x2715;</button>
+			<p class="vote-modal-title" id="voteModalTitle">Voter pour <span id="voteModalArtiste"></span></p>
+			<form id="voteForm" novalidate>
+				<div>
+					<label for="voteEmail">Votre adresse e-mail</label>
+					<input type="email" id="voteEmail" name="email" placeholder="exemple@email.com" autocomplete="email" required />
+				</div>
+				<button class="vote-modal-submit" type="submit" id="voteSubmitBtn">
+					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 50 50" fill="none"><path d="M43.75 16.6665V43.7498H6.25V16.6665" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M47.9154 6.25H2.08203V16.6667H47.9154V6.25Z" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.832 25H29.1654" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+					Confirmer mon vote
+				</button>
+				<p class="vote-modal-feedback" id="voteModalFeedback"></p>
+			</form>
+		</div>
+	</div>
+
 	<div class="mobile-menu-overlay" id="mobileMenuOverlay">
 		<a href="index.html">Victoires De La Musique</a>
 		<a href="index.html?theme=jazz">Victoires Du Jazz</a>
@@ -1004,6 +1165,112 @@
 			if (urlTheme && urlTheme !== currentTheme) {
 				switchVoteTheme(urlTheme);
 			}
+
+			// ── Attacher les clics sur les boutons "Voter" ──────────────
+			function attachVoteButtons() {
+				document.querySelectorAll(".candidate-vote").forEach(function (btn) {
+					btn.addEventListener("click", function () {
+						var card = btn.closest(".candidate-card");
+						var artisteName = card ? card.querySelector(".candidate-name").textContent : "";
+						openVoteModal(artisteName, currentTheme);
+					});
+				});
+			}
+
+			// Premier attachement (candidats déjà présents dans le HTML initial)
+			attachVoteButtons();
+
+			// Re-attacher après chaque changement de thème
+			var originalSwitch = switchVoteTheme;
+			switchVoteTheme = function (themeName) {
+				originalSwitch(themeName);
+				setTimeout(attachVoteButtons, 350); // après la transition fade
+			};
+		})();
+
+		// ── Modal vote ───────────────────────────────────────────────────
+		(function () {
+			var overlay  = document.getElementById("voteModalOverlay");
+			var closeBtn = document.getElementById("voteModalClose");
+			var form     = document.getElementById("voteForm");
+			var emailIn  = document.getElementById("voteEmail");
+			var feedback = document.getElementById("voteModalFeedback");
+			var submitBtn = document.getElementById("voteSubmitBtn");
+			var artisteSpan = document.getElementById("voteModalArtiste");
+
+			var selectedArtiste   = "";
+			var selectedCategorie = "";
+
+			window.openVoteModal = function (artiste, categorie) {
+				selectedArtiste   = artiste;
+				selectedCategorie = categorie;
+				artisteSpan.textContent = artiste;
+				emailIn.value = "";
+				feedback.textContent = "";
+				feedback.className = "vote-modal-feedback";
+				submitBtn.disabled = false;
+				overlay.classList.add("is-open");
+				document.body.style.overflow = "hidden";
+				setTimeout(function () { emailIn.focus(); }, 50);
+			};
+
+			function closeModal() {
+				overlay.classList.remove("is-open");
+				document.body.style.overflow = "";
+			}
+
+			closeBtn.addEventListener("click", closeModal);
+
+			overlay.addEventListener("click", function (e) {
+				if (e.target === overlay) closeModal();
+			});
+
+			document.addEventListener("keydown", function (e) {
+				if (e.key === "Escape" && overlay.classList.contains("is-open")) closeModal();
+			});
+
+			form.addEventListener("submit", function (e) {
+				e.preventDefault();
+
+				var email = emailIn.value.trim();
+				if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+					feedback.textContent = "Veuillez saisir une adresse e-mail valide.";
+					feedback.className = "vote-modal-feedback error";
+					return;
+				}
+
+				submitBtn.disabled = true;
+				feedback.textContent = "";
+				feedback.className = "vote-modal-feedback";
+
+				var body = new URLSearchParams();
+				body.set("email",     email);
+				body.set("artiste",   selectedArtiste);
+				body.set("categorie", selectedCategorie);
+
+				fetch("vote/submit_vote.php", {
+					method: "POST",
+					headers: { "Content-Type": "application/x-www-form-urlencoded" },
+					body: body.toString()
+				})
+				.then(function (res) { return res.json(); })
+				.then(function (data) {
+					if (data.success) {
+						feedback.textContent = "Merci ! Votre vote a bien été enregistré.";
+						feedback.className = "vote-modal-feedback success";
+						setTimeout(closeModal, 2200);
+					} else {
+						feedback.textContent = data.error || "Une erreur est survenue.";
+						feedback.className = "vote-modal-feedback error";
+						submitBtn.disabled = false;
+					}
+				})
+				.catch(function () {
+					feedback.textContent = "Impossible de joindre le serveur.";
+					feedback.className = "vote-modal-feedback error";
+					submitBtn.disabled = false;
+				});
+			});
 		})();
 	</script>
 </body>
