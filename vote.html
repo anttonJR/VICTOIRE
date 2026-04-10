@@ -1243,24 +1243,34 @@
 				feedback.textContent = "";
 				feedback.className = "vote-modal-feedback";
 
-				var body = new URLSearchParams();
-				body.set("email",     email);
-				body.set("artiste",   selectedArtiste);
-				body.set("categorie", selectedCategorie);
+				var SUPABASE_URL = "https://xoybzcowyhcllatgcvuw.supabase.co";
+				var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhveWJ6Y293eWhjbGxhdGdjdnV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjE5OTgsImV4cCI6MjA5MTM5Nzk5OH0.xm9ct6q6-d9EQ0ohAccteS-o6rrH5t93sAmV_VgMNW8";
 
-				fetch("vote/submit_vote.php", {
+				fetch(SUPABASE_URL + "/rest/v1/votes", {
 					method: "POST",
-					headers: { "Content-Type": "application/x-www-form-urlencoded" },
-					body: body.toString()
+					headers: {
+						"Content-Type": "application/json",
+						"apikey": SUPABASE_KEY,
+						"Authorization": "Bearer " + SUPABASE_KEY,
+						"Prefer": "return=minimal"
+					},
+					body: JSON.stringify({
+						email: email,
+						artiste: selectedArtiste,
+						categorie: selectedCategorie
+					})
 				})
-				.then(function (res) { return res.json(); })
-				.then(function (data) {
-					if (data.success) {
+				.then(function (res) {
+					if (res.ok) {
 						feedback.textContent = "Merci ! Votre vote a bien été enregistré.";
 						feedback.className = "vote-modal-feedback success";
 						setTimeout(closeModal, 2200);
+					} else if (res.status === 409) {
+						feedback.textContent = "Cet e-mail a déjà voté dans cette catégorie.";
+						feedback.className = "vote-modal-feedback error";
+						submitBtn.disabled = false;
 					} else {
-						feedback.textContent = data.error || "Une erreur est survenue.";
+						feedback.textContent = "Une erreur est survenue.";
 						feedback.className = "vote-modal-feedback error";
 						submitBtn.disabled = false;
 					}
