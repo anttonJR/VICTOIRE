@@ -1727,8 +1727,28 @@
 				min-width: 85vw;
 			}
 
+			.edition-zoom-section {
+				height: auto;
+			}
+
+			.edition-zoom-sticky {
+				position: relative;
+				height: auto;
+				padding: 40px 0;
+			}
+
+			.edition-zoom-title {
+				position: relative;
+				top: auto;
+				left: auto;
+				transform: none;
+				margin-bottom: 16px;
+			}
+
 			.edition-zoom-frame {
 				width: 96vw;
+				transform: none !important;
+				border-radius: 10px;
 			}
 
 			.event-label {
@@ -1771,8 +1791,8 @@
 
 		@media (max-width: 680px) {
 			.hero {
-				min-height: 100vh;
-				min-height: 100svh;
+				min-height: 85vh;
+				min-height: 85svh;
 				padding: 0 16px 20px;
 				display: flex;
 				flex-direction: column;
@@ -2011,18 +2031,16 @@
 		<div class="edition-zoom-sticky">
 			<h2 class="edition-zoom-title" id="editionZoomTitle">Edition 2026</h2>
 			<div class="edition-zoom-frame" id="editionZoomFrame">
-				<video
+				<iframe
 					class="edition-zoom-video"
 					id="editionZoomVideo"
-					src="0407.mp4"
+					src="https://www.youtube.com/embed/CE-vBPb6BpM?list=PLtRB2D7fUat95_W2dSYEX3DIyJoXVcBOM&enablejsapi=1"
 					title="Edition 2026 - Les Victoires de la Musique"
-					controls
-					playsinline
-					crossorigin="anonymous"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen
 					style="width:100%;height:100%;position:absolute;top:0;left:0;object-fit:cover;"
-				>
-					<track kind="subtitles" src="0407.vtt" srclang="fr" label="Français" default />
-				</video>
+				></iframe>
 			</div>
 		</div>
 	</section>
@@ -2579,6 +2597,13 @@
 				const FULLSCREEN_START = 0.42;
 				const FULLSCREEN_END = 0.76;
 				let ticking = false;
+				let wasFullscreen = false;
+
+				const pauseVideo = () => {
+					if (zoomVideo) {
+						zoomVideo.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+					}
+				};
 
 				const updateZoom = () => {
 					const rect = zoomSection.getBoundingClientRect();
@@ -2619,6 +2644,12 @@
 					if (zoomTitle) {
 						zoomTitle.style.setProperty("--zoom-title-opacity", String(clamp(titleOpacity, 0, 1)));
 					}
+
+					const isFullscreen = progress >= FULLSCREEN_START && progress <= FULLSCREEN_END;
+					if (wasFullscreen && !isFullscreen) {
+						pauseVideo();
+					}
+					wasFullscreen = isFullscreen;
 
 					return { rect, vh, scrollable, progress };
 				};
