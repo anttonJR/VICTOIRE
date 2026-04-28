@@ -523,6 +523,51 @@
 			font-weight: 500;
 		}
 
+		@keyframes assoc-fade-soft {
+			from { opacity: 0; transform: translate3d(0, -16px, 0); }
+			to { opacity: 1; transform: translate3d(0, 0, 0); }
+		}
+
+		.navbar-wrap {
+			animation: assoc-fade-soft 820ms cubic-bezier(0.22, 0.8, 0.24, 1) 120ms backwards;
+		}
+
+		.reveal {
+			opacity: 0;
+			transform: translate3d(0, 48px, 0);
+			transition:
+				opacity 900ms cubic-bezier(0.22, 0.8, 0.24, 1),
+				transform 900ms cubic-bezier(0.22, 0.8, 0.24, 1),
+				filter 900ms cubic-bezier(0.22, 0.8, 0.24, 1);
+			transition-delay: var(--reveal-delay, 0ms);
+			will-change: opacity, transform;
+		}
+
+		.reveal--fade { transform: none; }
+		.reveal--left { transform: translate3d(-48px, 0, 0); }
+		.reveal--right { transform: translate3d(48px, 0, 0); }
+		.reveal--scale {
+			transform: translate3d(0, 24px, 0) scale(0.94);
+			filter: blur(4px);
+		}
+
+		.reveal.is-revealed {
+			opacity: 1;
+			transform: translate3d(0, 0, 0) scale(1);
+			filter: none;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.reveal,
+			.reveal.is-revealed {
+				opacity: 1;
+				transform: none;
+				filter: none;
+				transition: none;
+			}
+			.navbar-wrap { animation: none !important; }
+		}
+
 		@media (max-width: 1180px) {
 			.page {
 				padding-left: 34px;
@@ -849,55 +894,55 @@
 				<div class="nav-dropdown">
 					<a href="#" class="nav-dropdown-toggle">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 					<div class="nav-dropdown-menu">
-						<a href="vote.html">Musique</a>
-						<a href="#">Jazz</a>
-						<a href="#">Musique Classique</a>
+						<a href="vote.html?theme=musique">Musique</a>
+						<a href="vote.html?theme=jazz">Jazz</a>
+						<a href="vote.html?theme=classique">Musique Classique</a>
 					</div>
 				</div>
 			</nav>
 		</div>
 
 		<section class="association-grid" aria-label="Presentation de l'association">
-			<div>
+			<div class="reveal" style="--reveal-delay: 120ms;">
 				<h1>L'association</h1>
 				<p class="copy">L'Association "Les Victoires de la Musique" a ete creee le 26 juin 1985. Son objectif est d'organiser et de produire trois emissions de television sous forme d'un spectacle "en direct" pour les Victoires de la Musique, et les Victoires de la Musique Classique et d'un film pour les Victoires du Jazz, durant lesquels sont decernes des prix, dits "Victoires".</p>
 			</div>
 
-			<div>
+			<div class="reveal reveal--scale" style="--reveal-delay: 240ms;">
 				<img class="visual" src="assets/association/association_photo1.png" alt="Photo historique de l'association" loading="lazy" />
 			</div>
 
-			<div>
+			<div class="reveal reveal--scale" style="--reveal-delay: 360ms;">
 				<img class="visual" src="assets/association/association_photo2.png" alt="Membres de l'association" loading="lazy" />
 			</div>
 
-			<div>
+			<div class="reveal" style="--reveal-delay: 480ms;">
 				<p class="copy">L'Association "Les Victoires de la Musique", association regie par la loi de 1901, regroupe 27 membres dont 16 organisations de la filiere musicale (reparties en 4 colleges :</p>
 				<p class="copy">le college des auteurs, compositeurs, editeurs, le college des artistes interpretes, le college des producteurs phonographiques et le college des producteurs de spectacles), le Ministere de la Culture (DGMIC et DGCA), 5 membres associes et 2 membres observateurs (CNM).</p>
 			</div>
 		</section>
 
 		<section class="team-section" aria-label="L'equipe de l'association">
-			<h2 class="team-title">L'equipe</h2>
+			<h2 class="team-title reveal">L'equipe</h2>
 
 			<div class="team-grid">
-				<article class="team-member">
+				<article class="team-member reveal" style="--reveal-delay: 120ms;">
 					<p class="team-role">President de l'Association pour les editions 2026 et 2027 : Antoine Gouiffes-Yan</p>
 					<img class="team-photo" src="assets/association/association_équipe1.png" alt="Portrait d'Antoine Gouiffes-Yan" loading="lazy" />
 				</article>
 
-				<article class="team-member">
+				<article class="team-member reveal" style="--reveal-delay: 240ms;">
 					<p class="team-role">President des Victoires du Jazz 2026 : Bruno Guermonprez</p>
 					<img class="team-photo" src="assets/association/association_équipe2.png" alt="Portrait de Bruno Guermonprez" loading="lazy" />
 				</article>
 
-				<article class="team-member">
+				<article class="team-member reveal" style="--reveal-delay: 360ms;">
 					<p class="team-role">President des Victoires de la Musique Classique 2026 : Herve Defranoux</p>
 					<img class="team-photo" src="assets/association/association_équipe3.png" alt="Portrait de Herve Defranoux" loading="lazy" />
 				</article>
 			</div>
 
-			<div class="team-notes">
+			<div class="team-notes reveal">
 				<p class="team-note">Directeur general : Jean-Yves de Linares</p>
 				<p class="team-note">Directrice executive : Octavie de Tournemire</p>
 				<p class="team-note">Direction artistique des ceremonies :<br />Les Victoires de la Musique : Virginie Petit<br />Les Victoires de la Musique Classique : Anne Gubian<br />Les Victoires du Jazz : Octavie de Tournemire</p>
@@ -906,12 +951,12 @@
 		</section>
 
 		<section class="palmares-section" aria-label="Palmares">
-			<div class="palmares-category-wrap" id="palmaresCategoryWrap">
+			<div class="palmares-category-wrap reveal" id="palmaresCategoryWrap">
 				<button class="palmares-category-btn is-active" data-category="musique">Musique</button>
 				<button class="palmares-category-btn" data-category="jazz">Jazz</button>
 				<button class="palmares-category-btn" data-category="classique">Classique</button>
 			</div>
-			<div class="palmares-panel">
+			<div class="palmares-panel reveal" style="--reveal-delay: 140ms;">
 				<div class="palmares-year-wrap">
 					<button class="palmares-arrow" id="palmaresUp" aria-label="Annee precedente">&#8593;</button>
 					<div class="palmares-year"><span class="palmares-year-inner" id="palmaresYear">2026</span></div>
@@ -1301,7 +1346,7 @@
 
 	</div>
 
-	<footer class="site-footer" aria-label="Pied de page">
+	<footer class="site-footer reveal reveal--fade" aria-label="Pied de page">
 			<div class="site-footer-top">
 				<img class="footer-logo" src="assets/logos/LesVictoiresDeLaMusiqueEvenement.svg" alt="Les Victoires de la Musique" />
 
@@ -1341,9 +1386,9 @@
 		<div class="nav-dropdown">
 			<a href="#" class="nav-dropdown-toggle">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 			<div class="nav-dropdown-menu">
-				<a href="vote.html">Musique</a>
-				<a href="#">Jazz</a>
-				<a href="#">Musique Classique</a>
+				<a href="vote.html?theme=musique">Musique</a>
+				<a href="vote.html?theme=jazz">Jazz</a>
+				<a href="vote.html?theme=classique">Musique Classique</a>
 			</div>
 		</div>
 	</div>
@@ -1408,6 +1453,25 @@
 				});
 			}
 		});
+	})();
+
+	// Scroll reveal observer
+	(function () {
+		var revealTargets = document.querySelectorAll(".reveal");
+		if (!revealTargets.length) return;
+		if (!("IntersectionObserver" in window)) {
+			revealTargets.forEach(function (el) { el.classList.add("is-revealed"); });
+			return;
+		}
+		var revealObserver = new IntersectionObserver(function (entries, observer) {
+			entries.forEach(function (entry) {
+				if (entry.isIntersecting) {
+					entry.target.classList.add("is-revealed");
+					observer.unobserve(entry.target);
+				}
+			});
+		}, { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+		revealTargets.forEach(function (el) { revealObserver.observe(el); });
 	})();
 	</script>
 </body>

@@ -201,6 +201,8 @@
 		.navbar-wrap {
 			display: flex;
 			justify-content: center;
+			position: relative;
+			z-index: 20;
 		}
 
 		.navbar {
@@ -220,12 +222,19 @@
 				inset 0 1px 1px rgba(255, 255, 255, 0.28),
 				inset 0 -8px 20px rgba(138, 0, 0, 0.2),
 				0 10px 26px rgba(40, 0, 0, 0.28);
-			overflow: hidden;
 			transform-style: preserve-3d;
 			transition: transform 220ms ease;
 		}
 
-		.navbar::before {
+		.navbar-shine {
+			position: absolute;
+			inset: 0;
+			overflow: hidden;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		.navbar-shine::before {
 			content: "";
 			position: absolute;
 			inset: 0;
@@ -233,11 +242,15 @@
 			transform: translateX(-125%);
 			transition: transform 650ms ease;
 			pointer-events: none;
-			clip-path: inset(0);
 		}
 
-		.navbar.is-shiny::before {
+		.navbar.is-shiny .navbar-shine::before {
 			transform: translateX(125%);
+		}
+
+		.navbar > *:not(.navbar-shine) {
+			position: relative;
+			z-index: 1;
 		}
 
 		.navbar a {
@@ -695,7 +708,7 @@
 
 		.edition-zoom-section {
 			position: relative;
-			height: 290vh;
+			height: 240vh;
 			background: #000000;
 		}
 
@@ -1259,6 +1272,140 @@
 			font-weight: 500;
 		}
 
+		@keyframes hero-fade-up {
+			from {
+				opacity: 0;
+				transform: translate3d(0, 38px, 0);
+			}
+			to {
+				opacity: 1;
+				transform: translate3d(0, 0, 0);
+			}
+		}
+
+		@keyframes hero-fade-scale {
+			from {
+				opacity: 0;
+				transform: translate3d(0, 22px, 0) scale(0.9);
+				filter: blur(6px);
+			}
+			to {
+				opacity: 1;
+				transform: translate3d(0, 0, 0) scale(1);
+				filter: blur(0);
+			}
+		}
+
+		@keyframes hero-fade-soft {
+			from {
+				opacity: 0;
+				transform: translate3d(0, 14px, 0);
+			}
+			to {
+				opacity: 1;
+				transform: translate3d(0, 0, 0);
+			}
+		}
+
+		body:not(.is-loading) .navbar-wrap {
+			animation: hero-fade-soft 820ms cubic-bezier(0.22, 0.8, 0.24, 1) 120ms backwards;
+		}
+
+		body:not(.is-loading) .v-sigil {
+			animation: hero-fade-scale 1100ms cubic-bezier(0.2, 0.8, 0.2, 1) 220ms backwards;
+		}
+
+		body:not(.is-loading) .title-line-1 {
+			animation: hero-fade-up 900ms cubic-bezier(0.22, 0.8, 0.24, 1) 380ms backwards;
+		}
+
+		body:not(.is-loading) .title-line-2 {
+			animation: hero-fade-up 900ms cubic-bezier(0.22, 0.8, 0.24, 1) 500ms backwards;
+		}
+
+		body:not(.is-loading) .hero-meta p {
+			animation: hero-fade-up 820ms cubic-bezier(0.22, 0.8, 0.24, 1) backwards;
+		}
+
+		body:not(.is-loading) .hero-meta p:nth-child(1) {
+			animation-delay: 660ms;
+		}
+
+		body:not(.is-loading) .hero-meta p:nth-child(2) {
+			animation-delay: 780ms;
+		}
+
+		.reveal {
+			opacity: 0;
+			transform: translate3d(0, 48px, 0);
+			transition:
+				opacity 900ms cubic-bezier(0.22, 0.8, 0.24, 1),
+				transform 900ms cubic-bezier(0.22, 0.8, 0.24, 1),
+				filter 900ms cubic-bezier(0.22, 0.8, 0.24, 1);
+			transition-delay: var(--reveal-delay, 0ms);
+			will-change: opacity, transform;
+		}
+
+		.reveal--fade {
+			transform: none;
+		}
+
+		.reveal--left {
+			transform: translate3d(-48px, 0, 0);
+		}
+
+		.reveal--right {
+			transform: translate3d(48px, 0, 0);
+		}
+
+		.reveal--scale {
+			transform: translate3d(0, 24px, 0) scale(0.94);
+			filter: blur(4px);
+		}
+
+		.reveal--clip {
+			opacity: 1;
+			clip-path: inset(0 0 100% 0);
+			transform: none;
+			transition:
+				clip-path 1100ms cubic-bezier(0.76, 0, 0.24, 1),
+				opacity 700ms ease;
+			transition-delay: var(--reveal-delay, 0ms);
+		}
+
+		.reveal.is-revealed {
+			opacity: 1;
+			transform: translate3d(0, 0, 0) scale(1);
+			filter: none;
+		}
+
+		.reveal--clip.is-revealed {
+			clip-path: inset(0 0 0 0);
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			body:not(.is-loading) .navbar-wrap,
+			body:not(.is-loading) .v-sigil,
+			body:not(.is-loading) .title-line-1,
+			body:not(.is-loading) .title-line-2,
+			body:not(.is-loading) .hero-meta p {
+				animation: none !important;
+			}
+
+			.reveal,
+			.reveal--left,
+			.reveal--right,
+			.reveal--scale,
+			.reveal--clip,
+			.reveal--fade {
+				opacity: 1 !important;
+				transform: none !important;
+				clip-path: none !important;
+				filter: none !important;
+				transition: none !important;
+			}
+		}
+
 		@keyframes marquee-scroll {
 			0% {
 				transform: translateX(0);
@@ -1351,7 +1498,7 @@
 			}
 
 			.edition-zoom-section {
-				height: 250vh;
+				height: 210vh;
 			}
 
 			.edition-zoom-frame {
@@ -1964,6 +2111,7 @@
 
 		<div class="navbar-wrap">
 			<nav class="navbar" id="liquidNavbar" aria-label="Navigation principale">
+				<span class="navbar-shine" aria-hidden="true"></span>
 				<a href="#" data-theme="musique" class="nav-active">Victoires De La Musique</a>
 				<a href="#" data-theme="jazz">Victoires Du Jazz</a>
 				<a href="#" data-theme="classique">Victoires De La Musique Classique</a>
@@ -1971,9 +2119,9 @@
 				<div class="nav-dropdown">
 					<a href="#" class="nav-dropdown-toggle">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 					<div class="nav-dropdown-menu">
-						<a href="vote.html">Musique</a>
-						<a href="#">Jazz</a>
-						<a href="#">Musique Classique</a>
+						<a href="vote.html?theme=musique">Musique</a>
+						<a href="vote.html?theme=jazz">Jazz</a>
+						<a href="vote.html?theme=classique">Musique Classique</a>
 					</div>
 				</div>
 			</nav>
@@ -2046,9 +2194,9 @@
 	</section>
 
 	<section class="events-section" aria-label="Blocs d'evenement">
-		<h2 class="events-category-title">Événements à venir</h2>
+		<h2 class="events-category-title reveal">Événements à venir</h2>
 		<div class="events-grid">
-			<button class="event-block event-block--active" data-theme="musique" type="button" aria-label="Bloc evenement 1">
+			<button class="event-block event-block--active reveal" style="--reveal-delay: 120ms;" data-theme="musique" type="button" aria-label="Bloc evenement 1">
 				<img class="event-left-logo event-left-logo--music" src="assets/logos/LesVictoiresDeLaMusiqueEvenement.svg" alt="" aria-hidden="true" />
 				<svg class="event-block-svg" xmlns="http://www.w3.org/2000/svg" width="1209" height="175" viewBox="0 0 1209 175" fill="none" aria-hidden="true" focusable="false">
 					<defs>
@@ -2067,7 +2215,7 @@
 				<span class="event-label">Date : 13 février 2026<br/>Retransmission : France 2 et France Inter<br/>Numéro de l'édition : 41e édition</span>
 			</button>
 
-			<button class="event-block" data-theme="jazz" type="button" aria-label="Bloc evenement 2">
+			<button class="event-block reveal" style="--reveal-delay: 240ms;" data-theme="jazz" type="button" aria-label="Bloc evenement 2">
 				<img class="event-left-logo" src="assets/logos/LesVictoiresDeLaMusiqueJazz.svg" alt="" aria-hidden="true" />
 				<svg class="event-block-svg" xmlns="http://www.w3.org/2000/svg" width="1209" height="175" viewBox="0 0 1209 175" fill="none" aria-hidden="true" focusable="false">
 					<defs>
@@ -2086,7 +2234,7 @@
 				<span class="event-label">Date : Entre le 3 et le 24 février 2026.<br/>Retransmission : france.tv / captation TV<br/>Numéro de l'édition : 24e édition</span>
 			</button>
 
-			<button class="event-block" data-theme="classique" type="button" aria-label="Bloc evenement 3">
+			<button class="event-block reveal" style="--reveal-delay: 360ms;" data-theme="classique" type="button" aria-label="Bloc evenement 3">
 				<img class="event-left-logo" src="assets/logos/LesVictoiresDeLaMusiqueClassiqueEvenement.svg" alt="" aria-hidden="true" />
 				<svg class="event-block-svg" xmlns="http://www.w3.org/2000/svg" width="1209" height="175" viewBox="0 0 1209 175" fill="none" aria-hidden="true" focusable="false">
 					<defs>
@@ -2109,9 +2257,9 @@
 
 	<section class="rediffusion-section" aria-label="Section rediffusion">
 		<div class="rediffusion-wrap">
-			<h2 class="rediffusion-title">Rediffusion</h2>
+			<h2 class="rediffusion-title reveal">Rediffusion</h2>
 			<div class="rediffusion-grid">
-				<div class="rediff-group">
+				<div class="rediff-group reveal" style="--reveal-delay: 100ms;">
 					<p class="rediff-kicker">Live</p>
 					<article class="rediff-card">
 					<div class="rediff-media">
@@ -2133,7 +2281,7 @@
 					</article>
 				</div>
 
-				<div class="rediff-group">
+				<div class="rediff-group reveal" style="--reveal-delay: 200ms;">
 					<p class="rediff-kicker">Performances</p>
 					<article class="rediff-card">
 					<div class="rediff-media">
@@ -2155,7 +2303,7 @@
 					</article>
 				</div>
 
-				<div class="rediff-group">
+				<div class="rediff-group reveal" style="--reveal-delay: 300ms;">
 					<p class="rediff-kicker">Performances</p>
 					<article class="rediff-card">
 					<div class="rediff-media">
@@ -2177,9 +2325,9 @@
 					</article>
 				</div>
 
-				<h3 class="rediff-divider">Une pluie de récompenses</h3>
+				<h3 class="rediff-divider reveal">Une pluie de récompenses</h3>
 
-				<article class="rediff-card">
+				<article class="rediff-card reveal" style="--reveal-delay: 100ms;">
 					<div class="rediff-media">
 						<img src="assets/rediff/Rediff_Recompense_Disiz.png" alt="Disiz reçoit son trophée" loading="lazy" />
 					</div>
@@ -2198,7 +2346,7 @@
 					</div>
 				</article>
 
-				<article class="rediff-card">
+				<article class="rediff-card reveal" style="--reveal-delay: 220ms;">
 					<div class="rediff-media">
 						<img src="assets/rediff/Rediff_Recompense_Theodora.png" alt="Theodora reçoit sa récompense" loading="lazy" />
 					</div>
@@ -2217,7 +2365,7 @@
 					</div>
 				</article>
 
-				<article class="rediff-card">
+				<article class="rediff-card reveal" style="--reveal-delay: 340ms;">
 					<div class="rediff-media">
 						<img src="assets/rediff/Rediff_Recompense_Justice.png" alt="Le groupe Justice reçoit le prix Concert" loading="lazy" />
 					</div>
@@ -2242,49 +2390,49 @@
 	<section class="association-section" aria-label="L'association">
 		<div class="association-wrap">
 			<div class="association-content">
-				<h2 class="association-title">L’association</h2>
-				<p class="association-copy">L’Association “Les Victoires de la Musique” a été créée le 26 juin 1985. Son objectif est d’organiser et de produire trois émissions de télévision sous forme de spectacle “en direct” pour les Victoires de la Musique, et les Victoires de la Musique Classique, et d’un film pour les Victoires du Jazz, durant lesquelles sont décernés des prix, dits “Victoires”.</p>
-				<p class="association-copy">L’intitulé et le contenu des prix sont établis chaque année par son Conseil d’administration qui adopte également les règlements.</p>
-				<a class="association-link" href="#">
+				<h2 class="association-title reveal">L’association</h2>
+				<p class="association-copy reveal" style="--reveal-delay: 120ms;">L’Association “Les Victoires de la Musique” a été créée le 26 juin 1985. Son objectif est d’organiser et de produire trois émissions de télévision sous forme de spectacle “en direct” pour les Victoires de la Musique, et les Victoires de la Musique Classique, et d’un film pour les Victoires du Jazz, durant lesquelles sont décernés des prix, dits “Victoires”.</p>
+				<p class="association-copy reveal" style="--reveal-delay: 220ms;">L’intitulé et le contenu des prix sont établis chaque année par son Conseil d’administration qui adopte également les règlements.</p>
+				<a class="association-link reveal" style="--reveal-delay: 320ms;" href="#">
 					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true" focusable="false">
 						<path d="M17.125 11.9167V18.1667C17.125 18.7192 16.9055 19.2491 16.5148 19.6398C16.1241 20.0305 15.5942 20.25 15.0417 20.25H3.58333C3.0308 20.25 2.50089 20.0305 2.11019 19.6398C1.71949 19.2491 1.5 18.7192 1.5 18.1667V6.70833C1.5 6.1558 1.71949 5.6259 2.11019 5.23519C2.50089 4.84449 3.0308 4.625 3.58333 4.625H9.83333M14 1.5H20.25M20.25 1.5V7.75M20.25 1.5L8.79167 12.9583" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 					</svg>
 					<span>En savoir plus</span>
 				</a>
 			</div>
-			<img class="association-visual" src="assets/photo_association.png" alt="Photo de l'association Les Victoires de la Musique" />
+			<img class="association-visual reveal reveal--right" src="assets/photo_association.png" alt="Photo de l'association Les Victoires de la Musique" />
 		</div>
 	</section>
 
 	<section class="faq-section" aria-label="Questions fréquentes">
 		<div class="faq-wrap">
 			<div class="faq-content">
-				<h2 class="faq-title">Questions<br />Fréquentes</h2>
-				<p class="faq-intro">Vous avez des questions ? Consultez notre FAQ pour trouver toutes les réponses à vos interrogations.</p>
+				<h2 class="faq-title reveal">Questions<br />Fréquentes</h2>
+				<p class="faq-intro reveal" style="--reveal-delay: 140ms;">Vous avez des questions ? Consultez notre FAQ pour trouver toutes les réponses à vos interrogations.</p>
 			</div>
 			<div class="faq-list">
-				<div class="faq-item">
+				<div class="faq-item reveal" style="--reveal-delay: 80ms;">
 					<button class="faq-question" type="button" aria-expanded="false">
 						<span>Quand ont lieu les Victoires de la Musique&nbsp;?</span>
 						<span class="faq-icon" aria-hidden="true">+</span>
 					</button>
 					<div class="faq-answer-wrap"><div class="faq-answer">Les résultats sont diffusés sur les chaînes de télévision partenaires et sur les réseaux sociaux officiels des Victoires de la Musique.</div></div>
 				</div>
-				<div class="faq-item">
+				<div class="faq-item reveal" style="--reveal-delay: 180ms;">
 					<button class="faq-question" type="button" aria-expanded="false">
 						<span>Qui peut participer ou voter pour les Victoires de la Musique&nbsp;?</span>
 						<span class="faq-icon" aria-hidden="true">+</span>
 					</button>
 					<div class="faq-answer-wrap"><div class="faq-answer">Le vote est principalement réservé aux membres de l’Académie des Victoires de la Musique, composée de professionnels de la musique et de journalistes spécialisés.</div></div>
 				</div>
-				<div class="faq-item">
+				<div class="faq-item reveal" style="--reveal-delay: 280ms;">
 					<button class="faq-question" type="button" aria-expanded="false">
 						<span>Comment les artistes sont-ils sélectionnés&nbsp;?</span>
 						<span class="faq-icon" aria-hidden="true">+</span>
 					</button>
 					<div class="faq-answer-wrap"><div class="faq-answer">Les nominations sont décidées par un comité de professionnels qui examine les productions musicales de l’année précédente.</div></div>
 				</div>
-				<div class="faq-item">
+				<div class="faq-item reveal" style="--reveal-delay: 380ms;">
 					<button class="faq-question" type="button" aria-expanded="false">
 						<span>Comment suivre les résultats en direct&nbsp;?</span>
 						<span class="faq-icon" aria-hidden="true">+</span>
@@ -2295,7 +2443,7 @@
 		</div>
 	</section>
 
-	<footer class="site-footer" aria-label="Pied de page">
+	<footer class="site-footer reveal reveal--fade" aria-label="Pied de page">
 		<div class="site-footer-top">
 			<img class="footer-logo" src="assets/logos/LesVictoiresDeLaMusiqueEvenement.svg" alt="Les Victoires de la Musique" />
 
@@ -2335,9 +2483,9 @@
 		<div class="nav-dropdown">
 			<a href="#" class="nav-dropdown-toggle">Vote <svg class="nav-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 			<div class="nav-dropdown-menu">
-				<a href="vote.html">Musique</a>
-				<a href="#">Jazz</a>
-				<a href="#">Musique Classique</a>
+				<a href="vote.html?theme=musique">Musique</a>
+				<a href="vote.html?theme=jazz">Jazz</a>
+				<a href="vote.html?theme=classique">Musique Classique</a>
 			</div>
 		</div>
 	</div>
@@ -2377,6 +2525,47 @@
 			}
 
 			const nav = document.getElementById("liquidNavbar");
+
+			const revealTargets = document.querySelectorAll(".reveal");
+			const initReveals = () => {
+				if (!revealTargets.length) return;
+				if (!("IntersectionObserver" in window)) {
+					revealTargets.forEach((el) => el.classList.add("is-revealed"));
+					return;
+				}
+				const revealObserver = new IntersectionObserver((entries, observer) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							entry.target.classList.add("is-revealed");
+							observer.unobserve(entry.target);
+						}
+					});
+				}, {
+					root: null,
+					rootMargin: "0px 0px -8% 0px",
+					threshold: 0.08
+				});
+				revealTargets.forEach((el) => revealObserver.observe(el));
+			};
+
+			const waitForPreloader = () => {
+				if (!document.body.classList.contains("is-loading")) {
+					initReveals();
+					return;
+				}
+				const bodyObserver = new MutationObserver(() => {
+					if (!document.body.classList.contains("is-loading")) {
+						bodyObserver.disconnect();
+						initReveals();
+					}
+				});
+				bodyObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+				window.setTimeout(() => {
+					bodyObserver.disconnect();
+					initReveals();
+				}, 3500);
+			};
+			waitForPreloader();
 
 			const faqItems = document.querySelectorAll(".faq-item");
 			faqItems.forEach((item) => {
@@ -2594,8 +2783,8 @@
 			const zoomVideo = document.getElementById("editionZoomVideo");
 			if (zoomSection && zoomFrame) {
 				const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-				const FULLSCREEN_START = 0.42;
-				const FULLSCREEN_END = 0.76;
+				const FULLSCREEN_START = 0.5;
+				const FULLSCREEN_END = 0.5;
 				let ticking = false;
 				let wasFullscreen = false;
 
@@ -2659,12 +2848,15 @@
 					ticking = true;
 					requestAnimationFrame(() => {
 						updateZoom();
-
 						ticking = false;
 					});
 				};
 
-				window.addEventListener("scroll", onScroll, { passive: true });
+				if (lenis && typeof lenis.on === "function") {
+					lenis.on("scroll", updateZoom);
+				} else {
+					window.addEventListener("scroll", onScroll, { passive: true });
+				}
 				window.addEventListener("resize", onScroll);
 				updateZoom();
 
